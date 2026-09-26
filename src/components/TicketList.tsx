@@ -1,15 +1,10 @@
 import { useState } from "react"
 import type { Ticket, TicketStatus, TicketPriority } from "../types/Ticket"
+import TicketCard from "./TicketCard"
+
 
 type TicketListProps = {
     tickets: Ticket[]
-}
-
-function formatLabel(value: string) {
-    return value
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
 }
 
 type StatusFilter = TicketStatus | "all"
@@ -79,17 +74,7 @@ export default function TicketList({ tickets }: TicketListProps) {
                 : (
                     <ul className="ticket-list">
                         {filteredTickets.map((ticket) => (
-                            <li key={ticket.id} className="ticket-item">
-                                <h3>{ticket.title}</h3>
-                                <p className={`ticket-status ${ticket.status}`}>
-                                    Status: {formatLabel(ticket.status)}
-                                </p>
-
-                                <p className={`ticket-priority ${ticket.priority}`}>
-                                    Priority: {formatLabel(ticket.priority)}
-                                </p>
-                                <p>{ticket.description}</p>
-                            </li>
+                            <TicketCard key={ticket.id} ticket={ticket} />
                         ))}
                     </ul>
                 )}

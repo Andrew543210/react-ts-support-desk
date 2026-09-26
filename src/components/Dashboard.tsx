@@ -1,4 +1,6 @@
 import StatCard from "./StatCard"
+import TicketList from "./TicketList"
+import { tickets } from "../data/tickets"
 
 const stats = [
     { title: "Open Tickets", value: 12 },
@@ -20,6 +22,7 @@ export default function Dashboard() {
                     />
                 ))}
             </section>
+            <TicketList tickets={tickets} />
         </>
     )
 }

@@ -3,7 +3,7 @@ import StatCard from "./StatCard"
 import TicketList from "./TicketList"
 import CreateTicketForm from "./CreateTicketForm"
 import { tickets } from "../data/tickets"
-import type { Ticket } from "../types/Ticket"
+import type { Ticket, TicketStatus } from "../types/Ticket"
 
 
 export default function Dashboard() {
@@ -32,6 +32,16 @@ export default function Dashboard() {
         ])
     }
 
+    function handleStatusChange(id: number, status: TicketStatus) {
+        setTicketList((currentTickets) =>
+            currentTickets.map((ticket) =>
+                ticket.id === id
+                    ? { ...ticket, status }
+                    : ticket
+            )
+        )
+    }
+
     return (
         <>
             <h2>Dashboard</h2>
@@ -45,7 +55,10 @@ export default function Dashboard() {
                     />
                 ))}
             </section>
-            <TicketList tickets={ticketList} />
+            <TicketList
+                tickets={ticketList}
+                onStatusChange={handleStatusChange}
+            />
             <CreateTicketForm onCreateTicket={handleCreateTicket} />
         </>
     )

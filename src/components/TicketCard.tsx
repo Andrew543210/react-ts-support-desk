@@ -1,7 +1,8 @@
-import type { Ticket } from "../types/Ticket"
+import type { Ticket, TicketStatus } from "../types/Ticket"
 
 type TicketCardProps = {
-    ticket: Ticket
+    ticket: Ticket,
+    onStatusChange: (id: number, status: TicketStatus) => void
 }
 
 function formatLabel(value: string) {
@@ -11,7 +12,7 @@ function formatLabel(value: string) {
         .join(" ")
 }
 
-export default function TicketCard({ ticket }: TicketCardProps) {
+export default function TicketCard({ ticket, onStatusChange }: TicketCardProps) {
     return (
         <li className="ticket-item">
             <h3>{ticket.title}</h3>
@@ -23,6 +24,16 @@ export default function TicketCard({ ticket }: TicketCardProps) {
                 Priority: {formatLabel(ticket.priority)}
             </p>
             <p>{ticket.description}</p>
+            <select
+                value={ticket.status}
+                onChange={(e) =>
+                    onStatusChange(ticket.id, e.target.value as TicketStatus)
+                }
+            >
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+            </select>
         </li>
     )
 }

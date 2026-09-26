@@ -66,3 +66,32 @@ nav a {
 .ticket-item h3 {
   margin-top: 0;
 }
+
+.ticket-status,
+.ticket-priority {
+  font-weight: 600;
+}
+
+.open {
+  color: #b45309;
+}
+
+.in-progress {
+  color: #2563eb;
+}
+
+.resolved {
+  color: #15803d;
+}
+
+.high {
+  color: #b91c1c;
+}
+
+.medium {
+  color: #b45309;
+}
+
+.low {
+  color: #15803d;
+}

@@ -4,6 +4,7 @@ type TicketCardProps = {
     ticket: Ticket,
     onStatusChange: (id: number, status: TicketStatus) => void
     onDeleteTicket: (id: number) => void
+    onEditTicket: (ticket: Ticket) => void
 }
 
 function formatLabel(value: string) {
@@ -13,7 +14,7 @@ function formatLabel(value: string) {
         .join(" ")
 }
 
-export default function TicketCard({ ticket, onStatusChange, onDeleteTicket }: TicketCardProps) {
+export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onEditTicket }: TicketCardProps) {
     return (
         <li className="ticket-item">
             <h3>{ticket.title}</h3>
@@ -35,6 +36,12 @@ export default function TicketCard({ ticket, onStatusChange, onDeleteTicket }: T
                 <option value="in-progress">In Progress</option>
                 <option value="resolved">Resolved</option>
             </select>
+            <button
+                type="button"
+                onClick={() => onEditTicket(ticket)}
+            >
+                Edit
+            </button>
             <button
                 type="button"
                 onClick={() => {

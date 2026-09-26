@@ -9,6 +9,8 @@ import type { Ticket, TicketStatus } from "../types/Ticket"
 export default function Dashboard() {
 
     const [ticketList, setTicketList] = useState(tickets)
+    const [editingTicket, setEditingTicket] = useState<Ticket | null>(null)
+
 
     const stats = [
         {
@@ -42,10 +44,26 @@ export default function Dashboard() {
         )
     }
 
+    function handleEditTicket(ticket: Ticket) {
+        setEditingTicket(ticket)
+    }
+
     function handleDeleteTicket(id: number) {
         setTicketList((currentTickets) =>
             currentTickets.filter((ticket) => ticket.id !== id)
         )
+    }
+
+    function handleSaveTicket(updatedTicket: Ticket) {
+        setTicketList((currentTickets) =>
+            currentTickets.map((ticket) =>
+                ticket.id === updatedTicket.id
+                    ? updatedTicket
+                    : ticket
+            )
+        )
+
+        setEditingTicket(null)
     }
 
     return (
@@ -65,8 +83,13 @@ export default function Dashboard() {
                 tickets={ticketList}
                 onStatusChange={handleStatusChange}
                 onDeleteTicket={handleDeleteTicket}
+                onEditTicket={handleEditTicket}
             />
-            <CreateTicketForm onCreateTicket={handleCreateTicket} />
+            <CreateTicketForm
+                onCreateTicket={handleCreateTicket}
+                editingTicket={editingTicket}
+                onSaveTicket={handleSaveTicket}
+            />
         </>
     )
 }

@@ -1,17 +1,29 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { FormEvent } from "react"
 import type { TicketPriority, Ticket } from "../types/Ticket"
 
 type CreateTicketFormProps = {
     onCreateTicket: (ticket: Ticket) => void
+    onSaveTicket: (ticket: Ticket) => void
+    editingTicket: Ticket | null
 }
 
-export default function CreateTicketForm({ onCreateTicket }: CreateTicketFormProps) {
+export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editingTicket }: CreateTicketFormProps) {
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [priority, setPriority] = useState<TicketPriority>("medium")
     const [error, setError] = useState("")
+
+    const isEditing = editingTicket !== null
+
+    useEffect(() => {
+        if (editingTicket) {
+            setTitle(editingTicket.title)
+            setDescription(editingTicket.description)
+            setPriority(editingTicket.priority)
+        }
+    }, [editingTicket])
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -24,15 +36,26 @@ export default function CreateTicketForm({ onCreateTicket }: CreateTicketFormPro
 
         setError("")
 
-        const newTicket: Ticket = {
-            id: Date.now(),
-            title: title.trim(),
-            description: description.trim(),
-            status: "open",
-            priority,
-        }
+        if (editingTicket) {
+            const updatedTicket: Ticket = {
+                ...editingTicket,
+                title: title.trim(),
+                description: description.trim(),
+                priority,
+            }
 
-        onCreateTicket(newTicket)
+            onSaveTicket(updatedTicket)
+        } else {
+            const newTicket: Ticket = {
+                id: Date.now(),
+                title: title.trim(),
+                description: description.trim(),
+                status: "open",
+                priority,
+            }
+
+            onCreateTicket(newTicket)
+        }
 
         setTitle("")
         setDescription("")
@@ -40,7 +63,7 @@ export default function CreateTicketForm({ onCreateTicket }: CreateTicketFormPro
     }
     return (
         <section>
-            <h2>Create Ticket</h2>
+            <h2>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
             <form
                 onSubmit={handleSubmit}
             >
@@ -68,7 +91,7 @@ export default function CreateTicketForm({ onCreateTicket }: CreateTicketFormPro
                     <option value="high">High</option>
                 </select>
                 {error && <p>{error}</p>}
-                <button type="submit">Create Ticket</button>
+                <button type="submit">{isEditing ? "Update Ticket" : "Create Ticket"}</button>
             </form>
         </section>
     )

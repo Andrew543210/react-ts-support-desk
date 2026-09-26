@@ -1,6 +1,9 @@
+import { useState } from "react"
 import StatCard from "./StatCard"
 import TicketList from "./TicketList"
+import CreateTicketForm from "./CreateTicketForm"
 import { tickets } from "../data/tickets"
+import type { Ticket } from "../types/Ticket"
 
 const stats = [
     { title: "Open Tickets", value: 12 },
@@ -8,7 +11,18 @@ const stats = [
     { title: "Resolved", value: 38 },
 ]
 
+
 export default function Dashboard() {
+
+    const [ticketList, setTicketList] = useState(tickets)
+
+    function handleCreateTicket(ticket: Ticket) {
+        setTicketList((currentTickets) => [
+            ...currentTickets,
+            ticket,
+        ])
+    }
+
     return (
         <>
             <h2>Dashboard</h2>
@@ -22,7 +36,8 @@ export default function Dashboard() {
                     />
                 ))}
             </section>
-            <TicketList tickets={tickets} />
+            <TicketList tickets={ticketList} />
+            <CreateTicketForm onCreateTicket={handleCreateTicket} />
         </>
     )
 }

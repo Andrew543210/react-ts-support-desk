@@ -19,15 +19,33 @@ export default function TicketList({ tickets }: TicketListProps) {
 
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
     const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all")
+    const [searchTerm, setSearchTerm] = useState("")
 
-    const filteredTickets = tickets.filter(ticket =>
-        (statusFilter === "all" || ticket.status === statusFilter) &&
-        (priorityFilter === "all" || ticket.priority === priorityFilter)
-    );
+    const filteredTickets = tickets.filter((ticket) => {
+        const matchesStatus =
+            statusFilter === "all" || ticket.status === statusFilter
+
+        const matchesPriority =
+            priorityFilter === "all" || ticket.priority === priorityFilter
+
+        const normalizedSearch = searchTerm.toLowerCase()
+
+        const matchesSearch =
+            ticket.title.toLowerCase().includes(normalizedSearch) ||
+            ticket.description.toLowerCase().includes(normalizedSearch)
+
+        return matchesStatus && matchesPriority && matchesSearch
+    })
 
     return (
         <section>
             <h2>Tickets</h2>
+            <input
+                type="text"
+                placeholder="Search tickets..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <div>
                 <label htmlFor="status-filter">Filter by Status:</label>
                 <select
@@ -75,6 +93,19 @@ export default function TicketList({ tickets }: TicketListProps) {
                         ))}
                     </ul>
                 )}
+            <p>
+                Showing {filteredTickets.length} of {tickets.length} tickets
+            </p>
+            <button
+                type="button"
+                onClick={() => {
+                    setSearchTerm("")
+                    setStatusFilter("all")
+                    setPriorityFilter("all")
+                }}
+            >
+                Reset filters
+            </button>
         </section>
     )
 }

@@ -5,16 +5,25 @@ import CreateTicketForm from "./CreateTicketForm"
 import { tickets } from "../data/tickets"
 import type { Ticket } from "../types/Ticket"
 
-const stats = [
-    { title: "Open Tickets", value: 12 },
-    { title: "In Progress", value: 5 },
-    { title: "Resolved", value: 38 },
-]
-
 
 export default function Dashboard() {
 
     const [ticketList, setTicketList] = useState(tickets)
+
+    const stats = [
+        {
+            title: "Open Tickets",
+            value: ticketList.filter((ticket) => ticket.status === "open").length,
+        },
+        {
+            title: "In Progress",
+            value: ticketList.filter((ticket) => ticket.status === "in-progress").length,
+        },
+        {
+            title: "Resolved",
+            value: ticketList.filter((ticket) => ticket.status === "resolved").length,
+        },
+    ]
 
     function handleCreateTicket(ticket: Ticket) {
         setTicketList((currentTickets) => [

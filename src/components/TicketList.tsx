@@ -6,12 +6,13 @@ import TicketCard from "./TicketCard"
 type TicketListProps = {
     tickets: Ticket[],
     onStatusChange: (id: number, status: TicketStatus) => void
+    onDeleteTicket: (id: number) => void
 }
 
 type StatusFilter = TicketStatus | "all"
 type PriorityFilter = TicketPriority | "all"
 
-export default function TicketList({ tickets, onStatusChange }: TicketListProps) {
+export default function TicketList({ tickets, onStatusChange, onDeleteTicket }: TicketListProps) {
 
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
     const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all")
@@ -75,7 +76,12 @@ export default function TicketList({ tickets, onStatusChange }: TicketListProps)
                 : (
                     <ul className="ticket-list">
                         {filteredTickets.map((ticket) => (
-                            <TicketCard key={ticket.id} ticket={ticket} onStatusChange={onStatusChange} />
+                            <TicketCard
+                                key={ticket.id}
+                                ticket={ticket}
+                                onStatusChange={onStatusChange}
+                                onDeleteTicket={onDeleteTicket}
+                            />
                         ))}
                     </ul>
                 )}

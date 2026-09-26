@@ -3,6 +3,7 @@ import type { Ticket, TicketStatus } from "../types/Ticket"
 type TicketCardProps = {
     ticket: Ticket,
     onStatusChange: (id: number, status: TicketStatus) => void
+    onDeleteTicket: (id: number) => void
 }
 
 function formatLabel(value: string) {
@@ -12,7 +13,7 @@ function formatLabel(value: string) {
         .join(" ")
 }
 
-export default function TicketCard({ ticket, onStatusChange }: TicketCardProps) {
+export default function TicketCard({ ticket, onStatusChange, onDeleteTicket }: TicketCardProps) {
     return (
         <li className="ticket-item">
             <h3>{ticket.title}</h3>
@@ -34,6 +35,19 @@ export default function TicketCard({ ticket, onStatusChange }: TicketCardProps) 
                 <option value="in-progress">In Progress</option>
                 <option value="resolved">Resolved</option>
             </select>
+            <button
+                type="button"
+                onClick={() => {
+                    const isConfirmed = confirm(
+                        "Are you sure you want to delete this ticket?"
+                    )
+                    if (isConfirmed) {
+                        onDeleteTicket(ticket.id)
+                    }
+                }}
+            >
+                Delete
+            </button>
         </li>
     )
 }

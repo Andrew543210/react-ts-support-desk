@@ -42,6 +42,12 @@ export default function Dashboard() {
         )
     }
 
+    function handleDeleteTicket(id: number) {
+        setTicketList((currentTickets) =>
+            currentTickets.filter((ticket) => ticket.id !== id)
+        )
+    }
+
     return (
         <>
             <h2>Dashboard</h2>
@@ -58,6 +64,7 @@ export default function Dashboard() {
             <TicketList
                 tickets={ticketList}
                 onStatusChange={handleStatusChange}
+                onDeleteTicket={handleDeleteTicket}
             />
             <CreateTicketForm onCreateTicket={handleCreateTicket} />
         </>

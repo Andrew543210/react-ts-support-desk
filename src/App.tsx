@@ -1,5 +1,19 @@
+import Header from "./components/Header"
+import Sidebar from "./components/Sidebar"
+import Dashboard from "./components/Dashboard"
+import "./App.css"
+
+
 function App() {
-  return <h1>SupportDesk</h1>
+  return (<>
+    <Header />
+    <div className="app-layout">
+      <Sidebar />
+      <main>
+        <Dashboard />
+      </main>
+    </div>
+  </>)
 }
 
 export default App

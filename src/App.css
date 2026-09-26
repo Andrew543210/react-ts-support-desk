@@ -1,0 +1,51 @@
+.app-layout {
+  display: flex;
+}
+
+header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+aside {
+  width: 220px;
+  padding: 24px 16px;
+  border-right: 1px solid #ddd;
+  min-height: calc(100vh - 80px);
+}
+
+main {
+  flex: 1;
+  padding: 24px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+nav a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-card {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  min-width: 160px;
+}

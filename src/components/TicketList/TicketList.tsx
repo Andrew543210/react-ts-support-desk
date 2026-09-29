@@ -1,7 +1,8 @@
 import { useState } from "react"
-import type { Ticket, TicketStatus, StatusFilter, PriorityFilter } from "../types/Ticket"
-import TicketCard from "./TicketCard"
-import TicketFilters from "./TicketFilters"
+import styles from "./TicketList.module.css"
+import type { Ticket, TicketStatus, StatusFilter, PriorityFilter } from "../../types/Ticket"
+import TicketCard from "../TicketCard/TicketCard"
+import TicketFilters from "../TicketFilters/TicketFilters"
 
 
 type TicketListProps = {
@@ -49,7 +50,7 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                     <p>No tickets found matching your filters.</p>
                 )
                 : (
-                    <ul className="ticket-list">
+                    <ul className={styles.list}>
                         {filteredTickets.map((ticket) => (
                             <TicketCard
                                 key={ticket.id}

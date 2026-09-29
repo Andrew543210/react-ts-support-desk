@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import styles from "./CreateTicketForm.module.css"
 import type { FormEvent } from "react"
-import type { Ticket, TicketPriority } from "../types/Ticket"
+import type { Ticket, TicketPriority } from "../../types/Ticket"
 
 type CreateTicketFormProps = {
     onCreateTicket: (ticket: Ticket) => void
@@ -75,10 +76,10 @@ export default function CreateTicketForm({
             <h2>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
 
             <form
-                className="ticket-form"
+                className={styles.form}
                 onSubmit={handleSubmit}
             >
-                <div className="form-group">
+                <div className={styles.group}>
                     <label htmlFor="ticket-title">Title</label>
                     <input
                         type="text"
@@ -88,7 +89,7 @@ export default function CreateTicketForm({
                     />
                 </div>
 
-                <div className="form-group">
+                <div className={styles.group}>
                     <label htmlFor="ticket-description">Description</label>
                     <textarea
                         id="ticket-description"
@@ -97,7 +98,7 @@ export default function CreateTicketForm({
                     />
                 </div>
 
-                <div className="form-group">
+                <div className={styles.group}>
                     <label htmlFor="ticket-priority">Priority</label>
                     <select
                         id="ticket-priority"
@@ -113,12 +114,12 @@ export default function CreateTicketForm({
                 </div>
 
                 {error && (
-                    <p className="form-error">
+                    <p className={styles.error}>
                         {error}
                     </p>
                 )}
 
-                <div className="form-actions">
+                <div className={styles.actions}>
                     <button type="submit">
                         {isEditing ? "Update Ticket" : "Create Ticket"}
                     </button>

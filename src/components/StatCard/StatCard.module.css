@@ -1,0 +1,22 @@
+.card {
+  min-width: 180px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.value {
+  margin: 10px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-mint-700);
+}

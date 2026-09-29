@@ -1,9 +1,10 @@
 import { useState } from "react"
-import StatCard from "./StatCard"
-import TicketList from "./TicketList"
-import CreateTicketForm from "./CreateTicketForm"
-import { tickets } from "../data/tickets"
-import type { Ticket, TicketStatus } from "../types/Ticket"
+import styles from "./Dashboard.module.css"
+import StatCard from "../StatCard/StatCard"
+import TicketList from "../TicketList/TicketList"
+import CreateTicketForm from "../CreateTicketForm/CreateTicketForm"
+import { tickets } from "../../data/tickets"
+import type { Ticket, TicketStatus } from "../../types/Ticket"
 
 
 export default function Dashboard() {
@@ -74,7 +75,7 @@ export default function Dashboard() {
         <>
             <h2>Dashboard</h2>
             <p>Overview of your support activity.</p>
-            <section className="stats-grid">
+            <section className={styles.statsGrid}>
                 {stats.map((stat) => (
                     <StatCard
                         key={stat.title}

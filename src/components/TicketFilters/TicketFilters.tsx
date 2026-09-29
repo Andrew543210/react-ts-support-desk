@@ -1,4 +1,5 @@
-import type { StatusFilter, PriorityFilter } from "../types/Ticket"
+import styles from "./TicketFilters.module.css"
+import type { StatusFilter, PriorityFilter } from "../../types/Ticket"
 
 type TicketFiltersProps = {
     searchTerm: string
@@ -18,10 +19,10 @@ export default function TicketFilters({
     onPriorityChange
 }: TicketFiltersProps) {
     return (
-        <div className="ticket-filters">
-            <div className="filter-group">
+        <div className={styles.filters}>
+            <div className={styles.group}>
                 <label htmlFor="search-filter">Search:</label>
-                <input 
+                <input
                     type="text"
                     id="search-filter"
                     placeholder="Search tickets..."
@@ -29,7 +30,7 @@ export default function TicketFilters({
                     onChange={(e) => onSearchChange(e.target.value)}
                 />
             </div>
-            <div className="filter-group">
+            <div className={styles.group}>
                 <label htmlFor="status-filter">Filter by Status:</label>
                 <select
                     id="status-filter"
@@ -42,7 +43,7 @@ export default function TicketFilters({
                     <option value="resolved">Resolved</option>
                 </select>
             </div>
-            <div className="filter-group">
+            <div className={styles.group}>
                 <label htmlFor="priority-filter">Filter by Priority:</label>
                 <select
                     id="priority-filter"

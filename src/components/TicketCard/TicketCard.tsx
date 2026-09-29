@@ -1,10 +1,23 @@
-import type { Ticket, TicketStatus } from "../types/Ticket"
+import styles from "./TicketCard.module.css"
+import type { Ticket, TicketPriority, TicketStatus } from "../../types/Ticket"
 
 type TicketCardProps = {
     ticket: Ticket,
     onStatusChange: (id: number, status: TicketStatus) => void
     onDeleteTicket: (id: number) => void
     onEditTicket: (ticket: Ticket) => void
+}
+
+const statusClassMap: Record<TicketStatus, string> = {
+    open: styles.open,
+    "in-progress": styles.inProgress,
+    resolved: styles.resolved,
+}
+
+const priorityClassMap: Record<TicketPriority, string> = {
+    high: styles.high,
+    medium: styles.medium,
+    low: styles.low,
 }
 
 function formatLabel(value: string) {
@@ -16,18 +29,18 @@ function formatLabel(value: string) {
 
 export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onEditTicket }: TicketCardProps) {
     return (
-        <li className="ticket-item">
-            <h3>{ticket.title}</h3>
-            <div className="ticket-meta">
-                <p className={`ticket-status ${ticket.status}`}>
+        <li className={styles.card}>
+            <h3 className={styles.title}>{ticket.title}</h3>
+            <div className={styles.meta}>
+                <p className={`${styles.status} ${statusClassMap[ticket.status]}`}>
                     Status: {formatLabel(ticket.status)}
                 </p>
-                <p className={`ticket-priority ${ticket.priority}`}>
+                <p className={`${styles.priority} ${priorityClassMap[ticket.priority]}`}>
                     Priority: {formatLabel(ticket.priority)}
                 </p>
             </div>
-            <p>{ticket.description}</p>
-            <div className="ticket-actions">
+            <p className={styles.description}>{ticket.description}</p>
+            <div className={styles.actions}>
                 <select
                     value={ticket.status}
                     onChange={(e) =>

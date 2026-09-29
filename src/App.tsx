@@ -1,15 +1,15 @@
-import Header from "./components/Header"
-import Sidebar from "./components/Sidebar"
-import Dashboard from "./components/Dashboard"
-import "./App.css"
+import Header from "./components/Header/Header"
+import Sidebar from "./components/Sidebar/Sidebar"
+import Dashboard from "./components/Dashboard/Dashboard"
+import styles from "./App.module.css"
 
 
 function App() {
   return (<>
     <Header />
-    <div className="app-layout">
+    <div className={styles.layout}>
       <Sidebar />
-      <main>
+      <main className={styles.main}>
         <Dashboard />
       </main>
     </div>

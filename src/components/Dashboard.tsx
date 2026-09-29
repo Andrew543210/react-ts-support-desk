@@ -48,6 +48,10 @@ export default function Dashboard() {
         setEditingTicket(ticket)
     }
 
+    function handleCancelEdit() {
+        setEditingTicket(null)
+    }
+
     function handleDeleteTicket(id: number) {
         setTicketList((currentTickets) =>
             currentTickets.filter((ticket) => ticket.id !== id)
@@ -89,6 +93,7 @@ export default function Dashboard() {
                 onCreateTicket={handleCreateTicket}
                 editingTicket={editingTicket}
                 onSaveTicket={handleSaveTicket}
+                onCancelEdit={handleCancelEdit}
             />
         </>
     )

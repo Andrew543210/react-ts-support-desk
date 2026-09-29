@@ -6,12 +6,13 @@ type CreateTicketFormProps = {
     onCreateTicket: (ticket: Ticket) => void
     onSaveTicket: (ticket: Ticket) => void
     editingTicket: Ticket | null
+    onCancelEdit: () => void
 }
 
-export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editingTicket }: CreateTicketFormProps) {
+export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editingTicket, onCancelEdit }: CreateTicketFormProps) {
 
     const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
+    const [description, setDescription] = useState("")  
     const [priority, setPriority] = useState<TicketPriority>("medium")
     const [error, setError] = useState("")
 
@@ -22,6 +23,11 @@ export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editing
             setTitle(editingTicket.title)
             setDescription(editingTicket.description)
             setPriority(editingTicket.priority)
+        }
+        else {
+            setTitle("")
+            setDescription("")
+            setPriority("medium")
         }
     }, [editingTicket])
 
@@ -91,7 +97,19 @@ export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editing
                     <option value="high">High</option>
                 </select>
                 {error && <p>{error}</p>}
-                <button type="submit">{isEditing ? "Update Ticket" : "Create Ticket"}</button>
+                {isEditing && (
+                    <button
+                        type="button"
+                        onClick={onCancelEdit}
+                    >
+                        Cancel
+                    </button>
+                )}
+                <button
+                        type="submit"
+                >
+                    {isEditing ? "Update Ticket" : "Create Ticket"}
+                </button>
             </form>
         </section>
     )

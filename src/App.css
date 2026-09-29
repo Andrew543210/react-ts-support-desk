@@ -95,3 +95,90 @@ nav a {
 .low {
   color: #15803d;
 }
+
+.ticket-filters {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group input,
+.filter-group select {
+  min-width: 180px;
+  padding: 8px 10px;
+}
+
+.filter-group:first-child input {
+  min-width: 260px;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 16px;
+}
+
+.ticket-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticket-actions select,
+.ticket-actions button {
+  padding: 6px 10px;
+}
+
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-actions button {
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.form-error {
+  margin: 0;
+  color: #b91c1c;
+  font-weight: 600;
+}

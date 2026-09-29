@@ -18,43 +18,46 @@ export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onE
     return (
         <li className="ticket-item">
             <h3>{ticket.title}</h3>
-            <p className={`ticket-status ${ticket.status}`}>
-                Status: {formatLabel(ticket.status)}
-            </p>
-
-            <p className={`ticket-priority ${ticket.priority}`}>
-                Priority: {formatLabel(ticket.priority)}
-            </p>
+            <div className="ticket-meta">
+                <p className={`ticket-status ${ticket.status}`}>
+                    Status: {formatLabel(ticket.status)}
+                </p>
+                <p className={`ticket-priority ${ticket.priority}`}>
+                    Priority: {formatLabel(ticket.priority)}
+                </p>
+            </div>
             <p>{ticket.description}</p>
-            <select
-                value={ticket.status}
-                onChange={(e) =>
-                    onStatusChange(ticket.id, e.target.value as TicketStatus)
-                }
-            >
-                <option value="open">Open</option>
-                <option value="in-progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-            </select>
-            <button
-                type="button"
-                onClick={() => onEditTicket(ticket)}
-            >
-                Edit
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    const isConfirmed = confirm(
-                        "Are you sure you want to delete this ticket?"
-                    )
-                    if (isConfirmed) {
-                        onDeleteTicket(ticket.id)
+            <div className="ticket-actions">
+                <select
+                    value={ticket.status}
+                    onChange={(e) =>
+                        onStatusChange(ticket.id, e.target.value as TicketStatus)
                     }
-                }}
-            >
-                Delete
-            </button>
+                >
+                    <option value="open">Open</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+                <button
+                    type="button"
+                    onClick={() => onEditTicket(ticket)}
+                >
+                    Edit
+                </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        const isConfirmed = confirm(
+                            "Are you sure you want to delete this ticket?"
+                        )
+                        if (isConfirmed) {
+                            onDeleteTicket(ticket.id)
+                        }
+                    }}
+                >
+                    Delete
+                </button>
+            </div>
         </li>
     )
 }

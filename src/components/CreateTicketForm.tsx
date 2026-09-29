@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import type { FormEvent } from "react"
-import type { TicketPriority, Ticket } from "../types/Ticket"
+import type { Ticket, TicketPriority } from "../types/Ticket"
 
 type CreateTicketFormProps = {
     onCreateTicket: (ticket: Ticket) => void
@@ -9,10 +9,14 @@ type CreateTicketFormProps = {
     onCancelEdit: () => void
 }
 
-export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editingTicket, onCancelEdit }: CreateTicketFormProps) {
-
+export default function CreateTicketForm({
+    onCreateTicket,
+    onSaveTicket,
+    editingTicket,
+    onCancelEdit,
+}: CreateTicketFormProps) {
     const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")  
+    const [description, setDescription] = useState("")
     const [priority, setPriority] = useState<TicketPriority>("medium")
     const [error, setError] = useState("")
 
@@ -23,14 +27,12 @@ export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editing
             setTitle(editingTicket.title)
             setDescription(editingTicket.description)
             setPriority(editingTicket.priority)
-        }
-        else {
+        } else {
             setTitle("")
             setDescription("")
             setPriority("medium")
         }
     }, [editingTicket])
-
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -67,49 +69,69 @@ export default function CreateTicketForm({ onCreateTicket, onSaveTicket, editing
         setDescription("")
         setPriority("medium")
     }
+
     return (
         <section>
             <h2>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
+
             <form
+                className="ticket-form"
                 onSubmit={handleSubmit}
             >
-                <label htmlFor="ticket-title">Title</label>
-                <input
-                    type="text"
-                    id="ticket-title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <label htmlFor="ticket-description">Description</label>
-                <textarea
-                    id="ticket-description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-                <label htmlFor="ticket-priority">Priority</label>
-                <select
-                    id="ticket-priority"
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value as TicketPriority)}
-                >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-                {error && <p>{error}</p>}
-                {isEditing && (
-                    <button
-                        type="button"
-                        onClick={onCancelEdit}
+                <div className="form-group">
+                    <label htmlFor="ticket-title">Title</label>
+                    <input
+                        type="text"
+                        id="ticket-title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="ticket-description">Description</label>
+                    <textarea
+                        id="ticket-description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="ticket-priority">Priority</label>
+                    <select
+                        id="ticket-priority"
+                        value={priority}
+                        onChange={(e) =>
+                            setPriority(e.target.value as TicketPriority)
+                        }
                     >
-                        Cancel
-                    </button>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                {error && (
+                    <p className="form-error">
+                        {error}
+                    </p>
                 )}
-                <button
-                        type="submit"
-                >
-                    {isEditing ? "Update Ticket" : "Create Ticket"}
-                </button>
+
+                <div className="form-actions">
+                    <button type="submit">
+                        {isEditing ? "Update Ticket" : "Create Ticket"}
+                    </button>
+
+                    {isEditing && (
+                        <button
+                            type="button"
+                            onClick={onCancelEdit}
+                        >
+                            Cancel
+                        </button>
+                    )}
+                </div>
             </form>
         </section>
     )

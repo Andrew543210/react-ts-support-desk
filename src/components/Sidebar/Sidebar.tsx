@@ -1,22 +1,27 @@
+import { NavLink } from "react-router-dom"
 import styles from "./Sidebar.module.css"
 
 export default function Sidebar() {
     return (
         <aside className={styles.sidebar}>
             <nav className={styles.nav}>
-                <a
-                    className={`${styles.link} ${styles.active}`}
-                    href="#"
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        `${styles.link} ${isActive ? styles.active : ""}`
+                    }
                 >
                     Dashboard
-                </a>
+                </NavLink>
 
-                <a
-                    className={styles.link}
-                    href="#"
+                <NavLink
+                    to="/tickets"
+                    className={({ isActive }) =>
+                        `${styles.link} ${isActive ? styles.active : ""}`
+                    }
                 >
                     Tickets
-                </a>
+                </NavLink>
 
                 <a
                     className={styles.link}

@@ -3,71 +3,50 @@ import styles from "./Dashboard.module.css"
 import StatCard from "../StatCard/StatCard"
 import TicketList from "../TicketList/TicketList"
 import CreateTicketForm from "../CreateTicketForm/CreateTicketForm"
-import { tickets } from "../../data/tickets"
 import type { Ticket, TicketStatus } from "../../types/Ticket"
 
+type DashboardProps = {
+    tickets: Ticket[]
+    onCreateTicket: (ticket: Ticket) => void
+    onStatusChange: (id: number, status: TicketStatus) => void
+    onDeleteTicket: (id: number) => void
+    onSaveTicket: (ticket: Ticket) => void
+}
 
-export default function Dashboard() {
-
-    const [ticketList, setTicketList] = useState(tickets)
+export default function Dashboard({
+    tickets,
+    onCreateTicket,
+    onStatusChange,
+    onDeleteTicket,
+    onSaveTicket,
+}: DashboardProps) {
     const [editingTicket, setEditingTicket] = useState<Ticket | null>(null)
-
 
     const stats = [
         {
             title: "Open Tickets",
-            value: ticketList.filter((ticket) => ticket.status === "open").length,
+            value: tickets.filter((ticket) => ticket.status === "open").length,
         },
         {
             title: "In Progress",
-            value: ticketList.filter((ticket) => ticket.status === "in-progress").length,
+            value: tickets.filter((ticket) => ticket.status === "in-progress").length,
         },
         {
             title: "Resolved",
-            value: ticketList.filter((ticket) => ticket.status === "resolved").length,
+            value: tickets.filter((ticket) => ticket.status === "resolved").length,
         },
     ]
-
-    function handleCreateTicket(ticket: Ticket) {
-        setTicketList((currentTickets) => [
-            ...currentTickets,
-            ticket,
-        ])
-    }
-
-    function handleStatusChange(id: number, status: TicketStatus) {
-        setTicketList((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === id
-                    ? { ...ticket, status }
-                    : ticket
-            )
-        )
-    }
 
     function handleEditTicket(ticket: Ticket) {
         setEditingTicket(ticket)
     }
 
-    function handleCancelEdit() {
+    function handleSaveTicket(ticket: Ticket) {
+        onSaveTicket(ticket)
         setEditingTicket(null)
     }
 
-    function handleDeleteTicket(id: number) {
-        setTicketList((currentTickets) =>
-            currentTickets.filter((ticket) => ticket.id !== id)
-        )
-    }
-
-    function handleSaveTicket(updatedTicket: Ticket) {
-        setTicketList((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === updatedTicket.id
-                    ? updatedTicket
-                    : ticket
-            )
-        )
-
+    function handleCancelEdit() {
         setEditingTicket(null)
     }
 
@@ -77,6 +56,7 @@ export default function Dashboard() {
                 <h1 className={styles.title}>Dashboard</h1>
                 <p className={styles.subtitle}>Overview of your support activity.</p>
             </header>
+
             <section className={styles.statsGrid}>
                 {stats.map((stat) => (
                     <StatCard
@@ -86,14 +66,16 @@ export default function Dashboard() {
                     />
                 ))}
             </section>
+
             <TicketList
-                tickets={ticketList}
-                onStatusChange={handleStatusChange}
-                onDeleteTicket={handleDeleteTicket}
+                tickets={tickets}
+                onStatusChange={onStatusChange}
+                onDeleteTicket={onDeleteTicket}
                 onEditTicket={handleEditTicket}
             />
+
             <CreateTicketForm
-                onCreateTicket={handleCreateTicket}
+                onCreateTicket={onCreateTicket}
                 editingTicket={editingTicket}
                 onSaveTicket={handleSaveTicket}
                 onCancelEdit={handleCancelEdit}

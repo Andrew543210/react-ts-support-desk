@@ -1,8 +1,22 @@
+.section {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  margin: 0 0 18px;
+  font-size: 20px;
+  color: var(--color-text-primary);
+}
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 520px;
 }
 
 .group {
@@ -12,36 +26,90 @@
 }
 
 .group label {
+  font-size: 13px;
   font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
 .group input,
 .group textarea,
 .group select {
-  padding: 8px 10px;
+  width: 100%;
+  padding: 10px 12px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
+  color: var(--color-text-primary);
   font: inherit;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.group input:focus,
+.group textarea:focus,
+.group select:focus {
+  border-color: var(--color-mint-500);
+  box-shadow: 0 0 0 3px rgba(58, 174, 140, 0.12);
 }
 
 .group textarea {
-  min-height: 100px;
+  min-height: 110px;
   resize: vertical;
 }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
-.actions button {
-  padding: 8px 14px;
+.primaryButton {
+  padding: 10px 16px;
+  border: 1px solid var(--color-mint-500);
+  border-radius: var(--radius-md);
+  background: var(--color-mint-500);
+  color: white;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.primaryButton:hover {
+  background: var(--color-mint-700);
+  border-color: var(--color-mint-700);
+}
+
+.secondaryButton {
+  padding: 10px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: var(--color-mint-100);
 }
 
 .error {
   margin: 0;
   color: var(--color-danger);
+  font-size: 13px;
   font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
 }

@@ -72,9 +72,11 @@ export default function Dashboard() {
     }
 
     return (
-        <>
-            <h2>Dashboard</h2>
-            <p>Overview of your support activity.</p>
+        <div className={styles.dashboard}>
+            <header className={styles.header}>
+                <h1 className={styles.title}>Dashboard</h1>
+                <p className={styles.subtitle}>Overview of your support activity.</p>
+            </header>
             <section className={styles.statsGrid}>
                 {stats.map((stat) => (
                     <StatCard
@@ -96,6 +98,6 @@ export default function Dashboard() {
                 onSaveTicket={handleSaveTicket}
                 onCancelEdit={handleCancelEdit}
             />
-        </>
+        </div>
     )
 }

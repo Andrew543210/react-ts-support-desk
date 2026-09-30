@@ -1,12 +1,89 @@
-header {
+.header {
   height: 80px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 24px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
-header h1 {
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logoMark {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-mint-500);
+  color: white;
+  font-weight: 700;
+}
+
+.title {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
+  color: var(--color-text-primary);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-mint-100);
+  color: var(--color-mint-700);
+  font-weight: 700;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.userRole {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .header {
+    height: auto;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .userInfo {
+    display: none;
+  }
+
+  .logoMark,
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
 }

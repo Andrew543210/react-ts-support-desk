@@ -72,8 +72,8 @@ export default function CreateTicketForm({
     }
 
     return (
-        <section>
-            <h2>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
+        <section className={styles.section}>
+            <h2 className={styles.title}>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
 
             <form
                 className={styles.form}
@@ -120,7 +120,10 @@ export default function CreateTicketForm({
                 )}
 
                 <div className={styles.actions}>
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        className={styles.primaryButton}
+                    >
                         {isEditing ? "Update Ticket" : "Create Ticket"}
                     </button>
 
@@ -128,6 +131,7 @@ export default function CreateTicketForm({
                         <button
                             type="button"
                             onClick={onCancelEdit}
+                            className={styles.secondaryButton}
                         >
                             Cancel
                         </button>

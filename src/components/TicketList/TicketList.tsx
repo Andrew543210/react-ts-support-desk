@@ -35,8 +35,10 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
     })
 
     return (
-        <section>
-            <h2>Tickets</h2>
+        <section className={styles.section}>
+            <div className={styles.header}>
+                <h2 className={styles.title}>Tickets</h2>
+            </div>
             <TicketFilters
                 searchTerm={searchTerm}
                 statusFilter={statusFilter}
@@ -62,19 +64,22 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                         ))}
                     </ul>
                 )}
-            <p>
-                Showing {filteredTickets.length} of {tickets.length} tickets
-            </p>
-            <button
-                type="button"
-                onClick={() => {
-                    setSearchTerm("")
-                    setStatusFilter("all")
-                    setPriorityFilter("all")
-                }}
-            >
-                Reset filters
-            </button>
+            <div className={styles.footer}>
+                <p className={styles.count}>
+                    Showing {filteredTickets.length} of {tickets.length} tickets
+                </p>
+                <button
+                    type="button"
+                    className={styles.resetButton}
+                    onClick={() => {
+                        setSearchTerm("")
+                        setStatusFilter("all")
+                        setPriorityFilter("all")
+                    }}
+                >
+                    Reset filters
+                </button>
+            </div>
         </section>
     )
 }

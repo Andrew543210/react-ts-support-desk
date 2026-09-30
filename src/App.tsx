@@ -6,6 +6,7 @@ import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Dashboard from "./components/Dashboard/Dashboard"
 import TicketsPage from "./pages/TicketsPage/TicketsPage"
+import EditTicketPage from "./pages/EditTicketPage/EditTicketPage"
 import styles from "./App.module.css"
 
 
@@ -60,11 +61,28 @@ function App() {
                     onCreateTicket={handleCreateTicket}
                     onStatusChange={handleStatusChange}
                     onDeleteTicket={handleDeleteTicket}
-                    onSaveTicket={handleSaveTicket}
                 />
             }
           />
-          <Route path="/tickets" element={<TicketsPage />} />
+          <Route
+            path="/tickets"
+            element={
+                <TicketsPage
+                    tickets={ticketList}
+                    onStatusChange={handleStatusChange}
+                    onDeleteTicket={handleDeleteTicket}
+                />
+            }
+          />
+          <Route
+            path="/tickets/:id/edit"
+            element={
+                <EditTicketPage
+                    tickets={ticketList}
+                    onSaveTicket={handleSaveTicket}
+                 />
+            }
+          />
         </Routes>
       </main>
     </div>

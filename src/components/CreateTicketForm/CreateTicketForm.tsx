@@ -3,25 +3,30 @@ import styles from "./CreateTicketForm.module.css"
 import type { FormEvent } from "react"
 import type { Ticket, TicketPriority } from "../../types/Ticket"
 
-type CreateTicketFormProps = {
-    onCreateTicket: (ticket: Ticket) => void
-    onSaveTicket: (ticket: Ticket) => void
-    editingTicket: Ticket | null
-    onCancelEdit: () => void
-}
+type CreateTicketFormProps =
+    | {
+          mode: "create"
+          onCreateTicket: (ticket: Ticket) => void
+          editingTicket?: never
+          onSaveTicket?: never
+          onCancelEdit?: never
+      }
+    | {
+          mode: "edit"
+          editingTicket: Ticket
+          onSaveTicket: (ticket: Ticket) => void
+          onCancelEdit: () => void
+          onCreateTicket?: never
+      }
 
-export default function CreateTicketForm({
-    onCreateTicket,
-    onSaveTicket,
-    editingTicket,
-    onCancelEdit,
-}: CreateTicketFormProps) {
+export default function CreateTicketForm(props: CreateTicketFormProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [priority, setPriority] = useState<TicketPriority>("medium")
     const [error, setError] = useState("")
 
-    const isEditing = editingTicket !== null
+    const isEditing = props.mode === "edit"
+    const editingTicket = isEditing ? props.editingTicket : null
 
     useEffect(() => {
         if (editingTicket) {
@@ -45,15 +50,15 @@ export default function CreateTicketForm({
 
         setError("")
 
-        if (editingTicket) {
+        if (props.mode === "edit") {
             const updatedTicket: Ticket = {
-                ...editingTicket,
+                ...props.editingTicket,
                 title: title.trim(),
                 description: description.trim(),
                 priority,
             }
 
-            onSaveTicket(updatedTicket)
+            props.onSaveTicket(updatedTicket)
         } else {
             const newTicket: Ticket = {
                 id: Date.now(),
@@ -63,7 +68,7 @@ export default function CreateTicketForm({
                 priority,
             }
 
-            onCreateTicket(newTicket)
+            props.onCreateTicket(newTicket)
         }
 
         setTitle("")
@@ -124,13 +129,13 @@ export default function CreateTicketForm({
                         type="submit"
                         className={styles.primaryButton}
                     >
-                        {isEditing ? "Update Ticket" : "Create Ticket"}
+                        {props.mode === "edit" ? "Update Ticket" : "Create Ticket"}
                     </button>
 
-                    {isEditing && (
+                    {props.mode === "edit" && (
                         <button
                             type="button"
-                            onClick={onCancelEdit}
+                            onClick={props.onCancelEdit}
                             className={styles.secondaryButton}
                         >
                             Cancel

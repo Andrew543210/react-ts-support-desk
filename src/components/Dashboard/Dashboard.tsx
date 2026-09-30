@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styles from "./Dashboard.module.css"
 import StatCard from "../StatCard/StatCard"
 import TicketList from "../TicketList/TicketList"
@@ -10,7 +10,6 @@ type DashboardProps = {
     onCreateTicket: (ticket: Ticket) => void
     onStatusChange: (id: number, status: TicketStatus) => void
     onDeleteTicket: (id: number) => void
-    onSaveTicket: (ticket: Ticket) => void
 }
 
 export default function Dashboard({
@@ -18,9 +17,8 @@ export default function Dashboard({
     onCreateTicket,
     onStatusChange,
     onDeleteTicket,
-    onSaveTicket,
 }: DashboardProps) {
-    const [editingTicket, setEditingTicket] = useState<Ticket | null>(null)
+    const navigate = useNavigate()
 
     const stats = [
         {
@@ -38,23 +36,16 @@ export default function Dashboard({
     ]
 
     function handleEditTicket(ticket: Ticket) {
-        setEditingTicket(ticket)
-    }
-
-    function handleSaveTicket(ticket: Ticket) {
-        onSaveTicket(ticket)
-        setEditingTicket(null)
-    }
-
-    function handleCancelEdit() {
-        setEditingTicket(null)
+        navigate(`/tickets/${ticket.id}/edit`)
     }
 
     return (
         <div className={styles.dashboard}>
             <header className={styles.header}>
                 <h1 className={styles.title}>Dashboard</h1>
-                <p className={styles.subtitle}>Overview of your support activity.</p>
+                <p className={styles.subtitle}>
+                    Overview of your support activity.
+                </p>
             </header>
 
             <section className={styles.statsGrid}>
@@ -75,10 +66,8 @@ export default function Dashboard({
             />
 
             <CreateTicketForm
+                mode="create"
                 onCreateTicket={onCreateTicket}
-                editingTicket={editingTicket}
-                onSaveTicket={handleSaveTicket}
-                onCancelEdit={handleCancelEdit}
             />
         </div>
     )

@@ -1,6 +1,4 @@
-import { useState } from "react"
-import { tickets } from "./data/tickets"
-import type { Ticket, TicketStatus } from "./types/Ticket"
+import { useTickets } from "./hooks/useTickets"
 import { Routes, Route } from "react-router-dom"
 import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
@@ -12,40 +10,13 @@ import styles from "./App.module.css"
 
 
 function App() {
-  const [ticketList, setTicketList] = useState(tickets)
-
-  function handleCreateTicket(ticket: Ticket) {
-        setTicketList((currentTickets) => [
-            ...currentTickets,
-            ticket,
-        ])
-    }
-
-    function handleStatusChange(id: number, status: TicketStatus) {
-        setTicketList((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === id
-                    ? { ...ticket, status }
-                    : ticket
-            )
-        )
-    }
-
-    function handleDeleteTicket(id: number) {
-        setTicketList((currentTickets) =>
-            currentTickets.filter((ticket) => ticket.id !== id)
-        )
-    }
-
-    function handleSaveTicket(updatedTicket: Ticket) {
-    setTicketList((currentTickets) =>
-        currentTickets.map((ticket) =>
-            ticket.id === updatedTicket.id
-                ? updatedTicket
-                : ticket
-        )
-    )
-    }
+ const {
+        tickets,
+        createTicket,
+        changeTicketStatus,
+        deleteTicket,
+        updateTicket,
+    } = useTickets()
 
 
   return (<>
@@ -58,9 +29,9 @@ function App() {
             path="/"
             element={
                 <Dashboard
-                    tickets={ticketList}
-                    onStatusChange={handleStatusChange}
-                    onDeleteTicket={handleDeleteTicket}
+                    tickets={tickets}
+                    onStatusChange={changeTicketStatus}
+                    onDeleteTicket={deleteTicket}
                 />
             }
           />
@@ -68,9 +39,9 @@ function App() {
             path="/tickets"
             element={
                 <TicketsPage
-                    tickets={ticketList}
-                    onStatusChange={handleStatusChange}
-                    onDeleteTicket={handleDeleteTicket}
+                    tickets={tickets}
+                    onStatusChange={changeTicketStatus}
+                    onDeleteTicket={deleteTicket}
                 />
             }
           />
@@ -78,7 +49,7 @@ function App() {
             path="/tickets/new"
             element={
                 <CreateTicketPage
-                    onCreateTicket={handleCreateTicket}
+                    onCreateTicket={createTicket}
                 />
             }
           />
@@ -86,8 +57,8 @@ function App() {
             path="/tickets/:id/edit"
             element={
                 <EditTicketPage
-                    tickets={ticketList}
-                    onSaveTicket={handleSaveTicket}
+                    tickets={tickets}
+                    onSaveTicket={updateTicket}
                  />
             }
           />

@@ -1,9 +1,8 @@
-import { useState } from "react"
 import styles from "./TicketList.module.css"
-import type { Ticket, TicketStatus, StatusFilter, PriorityFilter } from "../../types/Ticket"
+import type { Ticket, TicketStatus } from "../../types/Ticket"
 import TicketCard from "../TicketCard/TicketCard"
 import TicketFilters from "../TicketFilters/TicketFilters"
-
+import { useTicketFilters } from "../../hooks/useTicketFilters"
 
 type TicketListProps = {
     tickets: Ticket[]
@@ -14,25 +13,17 @@ type TicketListProps = {
 
 export default function TicketList({ tickets, onStatusChange, onDeleteTicket, onEditTicket }: TicketListProps) {
 
-    const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
-    const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all")
-    const [searchTerm, setSearchTerm] = useState("")
+    const {
+        filteredTickets,
+        statusFilter,
+        priorityFilter,
+        searchTerm,
+        setStatusFilter,
+        setPriorityFilter,
+        setSearchTerm,
+        resetFilters,
+    } = useTicketFilters(tickets)
 
-    const filteredTickets = tickets.filter((ticket) => {
-        const matchesStatus =
-            statusFilter === "all" || ticket.status === statusFilter
-
-        const matchesPriority =
-            priorityFilter === "all" || ticket.priority === priorityFilter
-
-        const normalizedSearch = searchTerm.toLowerCase()
-
-        const matchesSearch =
-            ticket.title.toLowerCase().includes(normalizedSearch) ||
-            ticket.description.toLowerCase().includes(normalizedSearch)
-
-        return matchesStatus && matchesPriority && matchesSearch
-    })
 
     return (
         <section className={styles.section}>
@@ -71,11 +62,7 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                 <button
                     type="button"
                     className={styles.resetButton}
-                    onClick={() => {
-                        setSearchTerm("")
-                        setStatusFilter("all")
-                        setPriorityFilter("all")
-                    }}
+                    onClick={resetFilters}
                 >
                     Reset filters
                 </button>

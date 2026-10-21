@@ -2,19 +2,16 @@ import { useNavigate } from "react-router-dom"
 import styles from "./Dashboard.module.css"
 import StatCard from "../StatCard/StatCard"
 import TicketList from "../TicketList/TicketList"
-import CreateTicketForm from "../CreateTicketForm/CreateTicketForm"
 import type { Ticket, TicketStatus } from "../../types/Ticket"
 
 type DashboardProps = {
     tickets: Ticket[]
-    onCreateTicket: (ticket: Ticket) => void
     onStatusChange: (id: number, status: TicketStatus) => void
     onDeleteTicket: (id: number) => void
 }
 
 export default function Dashboard({
     tickets,
-    onCreateTicket,
     onStatusChange,
     onDeleteTicket,
 }: DashboardProps) {
@@ -63,11 +60,6 @@ export default function Dashboard({
                 onStatusChange={onStatusChange}
                 onDeleteTicket={onDeleteTicket}
                 onEditTicket={handleEditTicket}
-            />
-
-            <CreateTicketForm
-                mode="create"
-                onCreateTicket={onCreateTicket}
             />
         </div>
     )

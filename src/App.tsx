@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar/Sidebar"
 import Dashboard from "./components/Dashboard/Dashboard"
 import TicketsPage from "./pages/TicketsPage/TicketsPage"
 import EditTicketPage from "./pages/EditTicketPage/EditTicketPage"
+import CreateTicketPage from "./pages/CreateTicketPage/CreateTicketPage"
 import styles from "./App.module.css"
 
 
@@ -58,7 +59,6 @@ function App() {
             element={
                 <Dashboard
                     tickets={ticketList}
-                    onCreateTicket={handleCreateTicket}
                     onStatusChange={handleStatusChange}
                     onDeleteTicket={handleDeleteTicket}
                 />
@@ -71,6 +71,14 @@ function App() {
                     tickets={ticketList}
                     onStatusChange={handleStatusChange}
                     onDeleteTicket={handleDeleteTicket}
+                />
+            }
+          />
+          <Route
+            path="/tickets/new"
+            element={
+                <CreateTicketPage
+                    onCreateTicket={handleCreateTicket}
                 />
             }
           />

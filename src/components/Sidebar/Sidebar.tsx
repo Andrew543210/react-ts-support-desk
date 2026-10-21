@@ -16,6 +16,7 @@ export default function Sidebar() {
 
                 <NavLink
                     to="/tickets"
+                    end
                     className={({ isActive }) =>
                         `${styles.link} ${isActive ? styles.active : ""}`
                     }
@@ -23,12 +24,14 @@ export default function Sidebar() {
                     Tickets
                 </NavLink>
 
-                <a
-                    className={styles.link}
-                    href="#"
+                <NavLink
+                    to="/tickets/new"
+                    className={({ isActive }) =>
+                        `${styles.link} ${isActive ? styles.active : ""}`
+                    }
                 >
                     Create Ticket
-                </a>
+                </NavLink>
             </nav>
         </aside>
     )

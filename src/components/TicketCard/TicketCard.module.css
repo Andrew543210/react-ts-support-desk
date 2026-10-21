@@ -19,13 +19,12 @@
   flex-wrap: wrap;
 }
 
-.status,
-.priority {
-  margin: 0;
-  padding: 4px 8px;
-  border-radius: 999px;
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
 .description {
@@ -68,36 +67,6 @@
   border-color: var(--color-mint-300);
 }
 
-.open {
-  color: #9a6700;
-  background: #fff4cc;
-}
-
-.inProgress {
-  color: #1d4ed8;
-  background: #dbeafe;
-}
-
-.resolved {
-  color: #166534;
-  background: #dcfce7;
-}
-
-.high {
-  color: #991b1b;
-  background: #fee2e2;
-}
-
-.medium {
-  color: #9a6700;
-  background: #fff4cc;
-}
-
-.low {
-  color: #166534;
-  background: #dcfce7;
-}
-
 @media (max-width: 600px) {
   .card {
     padding: 16px;
@@ -115,7 +84,28 @@
   }
 
   .actions select,
-  .actions button {
+  .actions button,
+  .detailsLink {
     width: 100%;
   }
+}
+.detailsLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-mint-700);
+  text-decoration: none;
+  font: inherit;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.detailsLink:hover {
+  background: var(--color-mint-100);
+  border-color: var(--color-mint-300);
 }

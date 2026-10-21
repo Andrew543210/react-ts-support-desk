@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom"
+import TicketBadge from "../TicketBadge/TicketBadge"
 import styles from "./TicketCard.module.css"
-import type { Ticket, TicketPriority, TicketStatus } from "../../types/Ticket"
+import type { Ticket, TicketStatus } from "../../types/Ticket"
 
 type TicketCardProps = {
     ticket: Ticket,
@@ -8,39 +10,35 @@ type TicketCardProps = {
     onEditTicket: (ticket: Ticket) => void
 }
 
-const statusClassMap: Record<TicketStatus, string> = {
-    open: styles.open,
-    "in-progress": styles.inProgress,
-    resolved: styles.resolved,
-}
-
-const priorityClassMap: Record<TicketPriority, string> = {
-    high: styles.high,
-    medium: styles.medium,
-    low: styles.low,
-}
-
-function formatLabel(value: string) {
-    return value
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
-}
-
 export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onEditTicket }: TicketCardProps) {
     return (
         <li className={styles.card}>
             <h3 className={styles.title}>{ticket.title}</h3>
             <div className={styles.meta}>
-                <p className={`${styles.status} ${statusClassMap[ticket.status]}`}>
-                    Status: {formatLabel(ticket.status)}
-                </p>
-                <p className={`${styles.priority} ${priorityClassMap[ticket.priority]}`}>
-                    Priority: {formatLabel(ticket.priority)}
-                </p>
+                <div className={styles.metaGroup}>
+                    <span>Status:</span>
+                    <TicketBadge
+                        kind="status"
+                        value={ticket.status}
+                    />
+                </div>
+
+                <div className={styles.metaGroup}>
+                    <span>Priority:</span>
+                    <TicketBadge
+                        kind="priority"
+                        value={ticket.priority}
+                    />
+                </div>
             </div>
             <p className={styles.description}>{ticket.description}</p>
             <div className={styles.actions}>
+                <Link
+                    to={`/tickets/${ticket.id}`}
+                    className={styles.detailsLink}
+                >
+                    View Details
+                </Link>
                 <select
                     value={ticket.status}
                     onChange={(e) =>

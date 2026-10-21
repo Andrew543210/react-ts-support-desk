@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard/Dashboard"
 import TicketsPage from "./pages/TicketsPage/TicketsPage"
 import EditTicketPage from "./pages/EditTicketPage/EditTicketPage"
 import CreateTicketPage from "./pages/CreateTicketPage/CreateTicketPage"
+import TicketDetailsPage from "./pages/TicketDetailsPage/TicketDetailsPage"
 import styles from "./App.module.css"
 
 
@@ -42,6 +43,14 @@ function App() {
                     tickets={tickets}
                     onStatusChange={changeTicketStatus}
                     onDeleteTicket={deleteTicket}
+                />
+            }
+          />
+          <Route
+            path="/tickets/:id"
+            element={
+                <TicketDetailsPage
+                    tickets={tickets}
                 />
             }
           />

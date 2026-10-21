@@ -7,6 +7,17 @@ type TicketDetailsPageProps = {
     tickets: Ticket[]
 }
 
+function formatTicketDate(value: string | null): string {
+    if (value === null) {
+        return "Unknown"
+    }
+
+    return new Intl.DateTimeFormat("en-US", {
+        dateStyle: "medium",
+        timeStyle: "short",
+    }).format(new Date(value))
+}
+
 export default function TicketDetailsPage({
     tickets,
 }: TicketDetailsPageProps) {
@@ -75,6 +86,29 @@ export default function TicketDetailsPage({
                             kind="priority"
                             value={ticket.priority}
                         />
+                    </dd>
+                </div>
+
+                <div className={styles.detailItem}>
+                    <dt className={styles.detailLabel}>Category</dt>
+                    <dd className={`${styles.detailValue} ${styles.categoryValue}`}>
+                        {ticket.category}
+                    </dd>
+                </div>
+
+                <div className={styles.detailItem}>
+                    <dt className={styles.detailLabel}>Created At</dt>
+                    <dd className={styles.detailValue}>
+                        {formatTicketDate(ticket.createdAt)}
+                    </dd>
+                </div>
+
+                <div className={styles.detailItem}>
+                    <dt className={styles.detailLabel}>Last Updated</dt>
+                    <dd className={styles.detailValue}>
+                        {ticket.updatedAt
+                            ? formatTicketDate(ticket.updatedAt)
+                            : "Not updated yet"}
                     </dd>
                 </div>
             </dl>

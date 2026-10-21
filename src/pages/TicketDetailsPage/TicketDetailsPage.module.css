@@ -113,6 +113,13 @@
   overflow-wrap: anywhere;
 }
 
+.categoryValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+}
+
 @media (max-width: 600px) {
   .header {
     flex-direction: column;

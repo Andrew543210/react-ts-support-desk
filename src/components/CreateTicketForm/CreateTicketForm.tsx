@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import styles from "./CreateTicketForm.module.css"
 import type { FormEvent } from "react"
-import type { Ticket, TicketPriority } from "../../types/Ticket"
+import type { Ticket, TicketPriority, TicketCategory } from "../../types/Ticket"
 
 type CreateTicketFormProps =
     | {
@@ -23,6 +23,7 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [priority, setPriority] = useState<TicketPriority>("medium")
+    const [category, setCategory] = useState<TicketCategory>("general")
     const [error, setError] = useState("")
 
     const isEditing = props.mode === "edit"
@@ -33,10 +34,12 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
             setTitle(editingTicket.title)
             setDescription(editingTicket.description)
             setPriority(editingTicket.priority)
+            setCategory(editingTicket.category ?? "general")
         } else {
             setTitle("")
             setDescription("")
             setPriority("medium")
+            setCategory("general")
         }
     }, [editingTicket])
 
@@ -56,6 +59,7 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
                 title: title.trim(),
                 description: description.trim(),
                 priority,
+                category,
             }
 
             props.onSaveTicket(updatedTicket)
@@ -66,6 +70,9 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
                 description: description.trim(),
                 status: "open",
                 priority,
+                category,
+                createdAt: null,
+                updatedAt: null,
             }
 
             props.onCreateTicket(newTicket)
@@ -74,6 +81,7 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
         setTitle("")
         setDescription("")
         setPriority("medium")
+        setCategory("general")
     }
 
     return (
@@ -115,6 +123,22 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div className={styles.group}>
+                    <label htmlFor="ticket-category">Category</label>
+                    <select
+                        id="ticket-category"
+                        value={category}
+                        onChange={(e) =>
+                            setCategory(e.target.value as TicketCategory)
+                        }
+                    >
+                        <option value="general">General</option>
+                        <option value="technical">Technical</option>
+                        <option value="billing">Billing</option>
+                        <option value="account">Account</option>
                     </select>
                 </div>
 

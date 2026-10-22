@@ -1,5 +1,5 @@
 import styles from "./TicketFilters.module.css"
-import type { StatusFilter, PriorityFilter, CategoryFilter } from "../../types/Ticket"
+import type { StatusFilter, PriorityFilter, CategoryFilter, TicketSort } from "../../types/Ticket"
 
 type TicketFiltersProps = {
     searchTerm: string
@@ -10,6 +10,8 @@ type TicketFiltersProps = {
     onSearchChange: (value: string) => void
     onStatusChange: (value: StatusFilter) => void
     onPriorityChange: (value: PriorityFilter) => void
+    sortOrder: TicketSort
+    onSortChange: (value: TicketSort) => void
 }
 
 export default function TicketFilters({
@@ -21,6 +23,8 @@ export default function TicketFilters({
     onPriorityChange,
     categoryFilter,
     onCategoryChange,
+    sortOrder,
+    onSortChange,
 }: TicketFiltersProps) {
     return (
         <div className={styles.filters}>
@@ -72,6 +76,17 @@ export default function TicketFilters({
                     <option value="billing">Billing</option>
                     <option value="account">Account</option>
                     <option value="general">General</option>
+                </select>
+            </div>
+            <div className={styles.group}>
+                <label htmlFor="sort-order">Sort by:</label>
+                <select
+                    id="sort-order"
+                    value={sortOrder}
+                    onChange={(e) => onSortChange(e.target.value as TicketSort)}
+                >
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
                 </select>
             </div>
         </div>

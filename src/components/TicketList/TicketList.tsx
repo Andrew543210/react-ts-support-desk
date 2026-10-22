@@ -15,10 +15,13 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
 
     const {
         filteredTickets,
+        sortedTickets,
         statusFilter,
         priorityFilter,
         categoryFilter,
         searchTerm,
+        sortOrder,
+        setSortOrder,
         setStatusFilter,
         setPriorityFilter,
         setCategoryFilter,
@@ -37,6 +40,8 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                 searchTerm={searchTerm}
                 statusFilter={statusFilter}
                 priorityFilter={priorityFilter}
+                sortOrder={sortOrder}
+                onSortChange={setSortOrder}
                 onSearchChange={setSearchTerm}
                 onStatusChange={setStatusFilter}
                 onPriorityChange={setPriorityFilter}
@@ -48,7 +53,7 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                 )
                 : (
                     <ul className={styles.list}>
-                        {filteredTickets.map((ticket) => (
+                        {sortedTickets.map((ticket) => (
                             <TicketCard
                                 key={ticket.id}
                                 ticket={ticket}
@@ -61,7 +66,7 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                 )}
             <div className={styles.footer}>
                 <p className={styles.count}>
-                    Showing {filteredTickets.length} of {tickets.length} tickets
+                    Showing {sortedTickets.length} of {tickets.length} tickets
                 </p>
                 <button
                     type="button"

@@ -19,6 +19,7 @@ function App() {
         changeTicketStatus,
         deleteTicket,
         updateTicket,
+        addTicketComment,
     } = useTickets()
 
     const { showToast } = useToast()
@@ -39,6 +40,11 @@ function App() {
     ) {
         changeTicketStatus(id, status)
         showToast("Ticket status updated")
+    }
+
+    function handleAddComment(ticketId: number, content: string) {
+        addTicketComment(ticketId, content)
+        showToast("Comment added successfully")
     }
 
     function handleDeleteTicket(id: number) {
@@ -74,6 +80,7 @@ function App() {
             element={
                 <TicketDetailsPage
                     tickets={tickets}
+                    onAddComment={handleAddComment}
                 />
             }
           />

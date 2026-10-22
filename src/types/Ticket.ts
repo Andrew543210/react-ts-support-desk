@@ -24,4 +24,12 @@ export type Ticket = {
     category: TicketCategory;
     createdAt: string | null;
     updatedAt: string | null;
+    comments: TicketComment[];
+}
+
+export type TicketComment = {
+    id: string
+    author: string
+    content: string
+    createdAt: string
 }

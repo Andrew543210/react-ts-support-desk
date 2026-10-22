@@ -10,6 +10,7 @@ export const tickets: Ticket[] = [
         category: "account",
         createdAt: "2026-09-26T09:52:07.000Z",
         updatedAt: null,
+        comments: [],
     },
     {
         id: 2,
@@ -20,6 +21,7 @@ export const tickets: Ticket[] = [
         category: "billing",
         createdAt: "2026-09-26T09:52:07.000Z",
         updatedAt: "2026-09-26T09:52:07.000Z",
+        comments: [],
     },
     {
         id: 3,
@@ -30,5 +32,6 @@ export const tickets: Ticket[] = [
         category: "account",
         createdAt: "2026-09-26T09:52:07.000Z",
         updatedAt: "2026-09-26T09:52:07.000Z",
+        comments: [],
     },
 ]

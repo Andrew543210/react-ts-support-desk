@@ -1,10 +1,12 @@
 import { Link, useParams } from "react-router-dom"
 import TicketBadge from "../../components/TicketBadge/TicketBadge"
+import TicketComments from "../../components/TicketComments/TicketComments"
 import type { Ticket } from "../../types/Ticket"
 import styles from "./TicketDetailsPage.module.css"
 
 type TicketDetailsPageProps = {
     tickets: Ticket[]
+    onAddComment: (ticketId: number, content: string) => void
 }
 
 function formatTicketDate(value: string | null): string {
@@ -20,6 +22,7 @@ function formatTicketDate(value: string | null): string {
 
 export default function TicketDetailsPage({
     tickets,
+    onAddComment,
 }: TicketDetailsPageProps) {
     const { id } = useParams()
 
@@ -119,6 +122,12 @@ export default function TicketDetailsPage({
                 {ticket.description}
             </p>
         </article>
+
+        <TicketComments
+            key={ticket.id}
+            ticket={ticket}
+            onAddComment={onAddComment}
+        />
     </section>
 )
 }

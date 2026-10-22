@@ -1,0 +1,123 @@
+.section {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.title {
+    margin: 0 0 20px;
+    font-size: 20px;
+    color: var(--color-text-primary);
+}
+
+.emptyState {
+    padding: 16px 0;
+    color: var(--color-text-secondary);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+}
+
+.comment {
+    padding: 16px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.commentHeader strong {
+    color: var(--color-text-primary);
+}
+
+.commentHeader time {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.commentContent {
+    margin: 0;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form label {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.form textarea {
+    width: 100%;
+    padding: 12px;
+    font: inherit;
+    resize: vertical;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.form textarea:focus-visible {
+    outline: 2px solid var(--color-mint-500);
+    outline-offset: 2px;
+}
+
+.form button {
+    align-self: flex-end;
+    padding: 10px 18px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--color-mint-500);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.form button:hover:not(:disabled) {
+    background: var(--color-mint-700);
+}
+
+.form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form button:focus-visible {
+    outline: 2px solid var(--color-mint-700);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .section {
+        padding: 16px;
+    }
+
+    .form button {
+        width: 100%;
+    }
+}

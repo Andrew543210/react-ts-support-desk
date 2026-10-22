@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { tickets as initialTickets } from "../data/tickets"
-import type { Ticket, TicketStatus, TicketCategory, CreateTicketInput } from "../types/Ticket"
+import type { Ticket, TicketStatus, TicketCategory, CreateTicketInput, TicketComment } from "../types/Ticket"
 
 const STORAGE_KEY = "supportdesk:tickets"
 
@@ -13,10 +13,11 @@ function isTicketCategory(value: unknown): value is TicketCategory {
     )
 }
 
-type StoredTicket = Omit<Ticket, "category" | "createdAt" | "updatedAt"> & {
+type StoredTicket = Omit<Ticket, "category" | "createdAt" | "updatedAt" | "comments"> & {
     category?: unknown
     createdAt?: unknown
     updatedAt?: unknown
+    comments?: unknown
 }
 
 function normalizeStoredDate(value: unknown): string | null {
@@ -31,6 +32,25 @@ function normalizeStoredDate(value: unknown): string | null {
     }
 
     return new Date(timestamp).toISOString()
+}
+
+function isStoredComment(value: unknown): value is TicketComment {
+    if (
+        typeof value !== "object" ||
+        value === null ||
+        Array.isArray(value)
+    ) {
+        return false
+    }
+
+    const comment = value as Record<string, unknown>
+
+    return (
+        typeof comment.id === "string" &&
+        typeof comment.author === "string" &&
+        typeof comment.content === "string" &&
+        normalizeStoredDate(comment.createdAt) !== null
+    )
 }
 
 function isStoredTicket(value: unknown): value is StoredTicket {
@@ -92,6 +112,9 @@ export function useTickets() {
                     demoTicket?.createdAt ??
                     null,
                 updatedAt: normalizeStoredDate(ticket.updatedAt),
+                comments: Array.isArray(ticket.comments)
+                    ? ticket.comments.filter(isStoredComment)
+                    : [],
             }
         })
     }
@@ -126,10 +149,36 @@ export function useTickets() {
                 status: "open",
                 createdAt: now,
                 updatedAt: null,
+                comments: [],
             }
 
             return [...currentTickets, newTicket]
         })
+    }
+
+    function addTicketComment(ticketId: number, content: string) {
+        const trimmedContent = content.trim()
+
+        if (!trimmedContent) return
+
+        const newComment: TicketComment = {
+            id: crypto.randomUUID(),
+            author: "Support Agent",
+            content: trimmedContent,
+            createdAt: new Date().toISOString(),
+        }
+
+        setTickets((currentTickets) =>
+            currentTickets.map((ticket) =>
+                ticket.id === ticketId
+                    ? {
+                        ...ticket,
+                        comments: [...ticket.comments, newComment],
+                        updatedAt: newComment.createdAt,
+                    }
+                    : ticket
+            )
+        )
     }
 
     function changeTicketStatus(id: number, newStatus: TicketStatus) {
@@ -176,5 +225,6 @@ export function useTickets() {
         changeTicketStatus,
         deleteTicket,
         updateTicket,
+        addTicketComment,
     }
 }

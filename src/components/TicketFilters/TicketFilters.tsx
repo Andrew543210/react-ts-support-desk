@@ -87,6 +87,8 @@ export default function TicketFilters({
                 >
                     <option value="newest">Newest first</option>
                     <option value="oldest">Oldest first</option>
+                    <option value="priority-high">Highest priority</option>
+                    <option value="priority-low">Lowest priority</option>
                 </select>
             </div>
         </div>

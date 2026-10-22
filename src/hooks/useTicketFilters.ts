@@ -2,10 +2,17 @@ import { useState } from "react"
 import type {
     Ticket,
     StatusFilter,
+    TicketPriority,
     PriorityFilter,
     CategoryFilter,
     TicketSort
 } from "../types/Ticket"
+
+const priorityRank: Record<TicketPriority, number> = {
+    low: 1,
+    medium: 2,
+    high: 3,
+}
 
 export function useTicketFilters(tickets: Ticket[]) {
     const [statusFilter, setStatusFilter] =
@@ -42,6 +49,14 @@ export function useTicketFilters(tickets: Ticket[]) {
     })
 
     const sortedTickets = [...filteredTickets].sort((a, b) => {
+        if (sortOrder === "priority-high") {
+            return priorityRank[b.priority] - priorityRank[a.priority]
+        }
+
+        if (sortOrder === "priority-low") {
+            return priorityRank[a.priority] - priorityRank[b.priority]
+        }
+        
         if (a.createdAt === null && b.createdAt === null) return 0
         if (a.createdAt === null) return 1
         if (b.createdAt === null) return -1

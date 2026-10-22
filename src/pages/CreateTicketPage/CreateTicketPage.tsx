@@ -18,6 +18,7 @@ export default function CreateTicketPage({
 
     return (
         <section>
+            <h1>Create Ticket</h1>
             <TicketForm
                 mode="create"
                 onCreateTicket={handleCreateTicket}

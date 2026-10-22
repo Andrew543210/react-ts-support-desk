@@ -82,8 +82,6 @@ export default function TicketForm(props: TicketFormProps) {
 
     return (
         <section className={styles.section}>
-            <h2 className={styles.title}>{isEditing ? "Edit Ticket" : "Create Ticket"}</h2>
-
             <form
                 className={styles.form}
                 onSubmit={handleSubmit}

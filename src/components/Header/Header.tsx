@@ -5,7 +5,7 @@ export default function Header() {
         <header className={styles.header}>
             <div className={styles.brand}>
                 <div className={styles.logoMark}>S</div>
-                <h1 className={styles.title}>SupportDesk</h1>
+                <div className={styles.title}>SupportDesk</div>
             </div>
 
             <div className={styles.user}>

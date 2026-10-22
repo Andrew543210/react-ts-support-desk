@@ -17,9 +17,11 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
         filteredTickets,
         statusFilter,
         priorityFilter,
+        categoryFilter,
         searchTerm,
         setStatusFilter,
         setPriorityFilter,
+        setCategoryFilter,
         setSearchTerm,
         resetFilters,
     } = useTicketFilters(tickets)
@@ -31,12 +33,14 @@ export default function TicketList({ tickets, onStatusChange, onDeleteTicket, on
                 <h2 className={styles.title}>Tickets</h2>
             </div>
             <TicketFilters
+                categoryFilter={categoryFilter}
                 searchTerm={searchTerm}
                 statusFilter={statusFilter}
                 priorityFilter={priorityFilter}
                 onSearchChange={setSearchTerm}
                 onStatusChange={setStatusFilter}
                 onPriorityChange={setPriorityFilter}
+                onCategoryChange={setCategoryFilter}
             />
             {filteredTickets.length === 0 ?
                 (

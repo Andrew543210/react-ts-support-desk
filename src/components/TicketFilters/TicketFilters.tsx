@@ -1,10 +1,12 @@
 import styles from "./TicketFilters.module.css"
-import type { StatusFilter, PriorityFilter } from "../../types/Ticket"
+import type { StatusFilter, PriorityFilter, CategoryFilter } from "../../types/Ticket"
 
 type TicketFiltersProps = {
     searchTerm: string
     statusFilter: StatusFilter
     priorityFilter: PriorityFilter
+    categoryFilter: CategoryFilter
+    onCategoryChange: (value: CategoryFilter) => void
     onSearchChange: (value: string) => void
     onStatusChange: (value: StatusFilter) => void
     onPriorityChange: (value: PriorityFilter) => void
@@ -16,7 +18,9 @@ export default function TicketFilters({
     statusFilter,
     onStatusChange,
     priorityFilter,
-    onPriorityChange
+    onPriorityChange,
+    categoryFilter,
+    onCategoryChange,
 }: TicketFiltersProps) {
     return (
         <div className={styles.filters}>
@@ -54,6 +58,20 @@ export default function TicketFilters({
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
+                </select>
+            </div>
+            <div className={styles.group}>
+                <label htmlFor="category-filter">Filter by Category:</label>
+                <select
+                    id="category-filter"
+                    value={categoryFilter}
+                    onChange={(e) =>onCategoryChange(e.target.value as CategoryFilter)}
+                >
+                    <option value="all">All Categories</option>
+                    <option value="technical">Technical</option>
+                    <option value="billing">Billing</option>
+                    <option value="account">Account</option>
+                    <option value="general">General</option>
                 </select>
             </div>
         </div>

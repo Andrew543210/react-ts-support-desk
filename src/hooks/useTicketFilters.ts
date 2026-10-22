@@ -3,6 +3,7 @@ import type {
     Ticket,
     StatusFilter,
     PriorityFilter,
+    CategoryFilter
 } from "../types/Ticket"
 
 export function useTicketFilters(tickets: Ticket[]) {
@@ -11,6 +12,9 @@ export function useTicketFilters(tickets: Ticket[]) {
 
     const [priorityFilter, setPriorityFilter] =
         useState<PriorityFilter>("all")
+
+    const [categoryFilter, setCategoryFilter] =
+       useState<CategoryFilter>("all")
 
     const [searchTerm, setSearchTerm] = useState("")
 
@@ -23,16 +27,21 @@ export function useTicketFilters(tickets: Ticket[]) {
         const matchesPriority =
             priorityFilter === "all" || ticket.priority === priorityFilter
 
+        const matchesCategory =
+            categoryFilter === "all" ||
+            ticket.category === categoryFilter
+            
         const matchesSearch =
             ticket.title.toLowerCase().includes(normalizedSearch) ||
             ticket.description.toLowerCase().includes(normalizedSearch)
 
-        return matchesStatus && matchesPriority && matchesSearch
+        return matchesStatus && matchesPriority && matchesCategory && matchesSearch
     })
 
     function resetFilters() {
         setStatusFilter("all")
         setPriorityFilter("all")
+        setCategoryFilter("all")
         setSearchTerm("")
     }
 
@@ -40,9 +49,11 @@ export function useTicketFilters(tickets: Ticket[]) {
         filteredTickets,
         statusFilter,
         priorityFilter,
+        categoryFilter,
         searchTerm,
         setStatusFilter,
         setPriorityFilter,
+        setCategoryFilter,
         setSearchTerm,
         resetFilters,
     }

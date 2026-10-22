@@ -6,18 +6,45 @@ import Dashboard from "./components/Dashboard/Dashboard"
 import TicketsPage from "./pages/TicketsPage/TicketsPage"
 import EditTicketPage from "./pages/EditTicketPage/EditTicketPage"
 import CreateTicketPage from "./pages/CreateTicketPage/CreateTicketPage"
+import { useToast } from "./hooks/useToast"
 import TicketDetailsPage from "./pages/TicketDetailsPage/TicketDetailsPage"
 import styles from "./App.module.css"
+import type { CreateTicketInput, TicketStatus, Ticket } from "./types/Ticket"
 
 
 function App() {
- const {
+    const {
         tickets,
         createTicket,
         changeTicketStatus,
         deleteTicket,
         updateTicket,
     } = useTickets()
+
+    const { showToast } = useToast()
+
+    function handleCreateTicket(input: CreateTicketInput) {
+        createTicket(input)
+        showToast("Ticket created successfully")
+    }
+
+    function handleUpdateTicket(ticket: Ticket) {
+        updateTicket(ticket)
+        showToast("Ticket updated successfully")
+    }
+
+    function handleChangeTicketStatus(
+        id: number,
+        status: TicketStatus
+    ) {
+        changeTicketStatus(id, status)
+        showToast("Ticket status updated")
+    }
+
+    function handleDeleteTicket(id: number) {
+        deleteTicket(id)
+        showToast("Ticket deleted successfully")
+    }
 
 
   return (<>
@@ -37,8 +64,8 @@ function App() {
             element={
                 <TicketsPage
                     tickets={tickets}
-                    onStatusChange={changeTicketStatus}
-                    onDeleteTicket={deleteTicket}
+                    onStatusChange={handleChangeTicketStatus}
+                    onDeleteTicket={handleDeleteTicket}
                 />
             }
           />
@@ -54,7 +81,7 @@ function App() {
             path="/tickets/new"
             element={
                 <CreateTicketPage
-                    onCreateTicket={createTicket}
+                    onCreateTicket={handleCreateTicket}
                 />
             }
           />
@@ -63,7 +90,7 @@ function App() {
             element={
                 <EditTicketPage
                     tickets={tickets}
-                    onSaveTicket={updateTicket}
+                    onSaveTicket={handleUpdateTicket}
                  />
             }
           />

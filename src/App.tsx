@@ -29,11 +29,7 @@ function App() {
           <Route
             path="/"
             element={
-                <Dashboard
-                    tickets={tickets}
-                    onStatusChange={changeTicketStatus}
-                    onDeleteTicket={deleteTicket}
-                />
+                <Dashboard tickets={tickets} />
             }
           />
           <Route

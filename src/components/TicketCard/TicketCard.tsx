@@ -1,4 +1,6 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog"
 import TicketBadge from "../TicketBadge/TicketBadge"
 import styles from "./TicketCard.module.css"
 import type { Ticket, TicketStatus } from "../../types/Ticket"
@@ -11,6 +13,8 @@ type TicketCardProps = {
 }
 
 export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onEditTicket }: TicketCardProps) {
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+
     return (
         <li className={styles.card}>
             <h3 className={styles.title}>{ticket.title}</h3>
@@ -57,18 +61,21 @@ export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onE
                 </button>
                 <button
                     type="button"
-                    onClick={() => {
-                        const isConfirmed = confirm(
-                            "Are you sure you want to delete this ticket?"
-                        )
-                        if (isConfirmed) {
-                            onDeleteTicket(ticket.id)
-                        }
-                    }}
+                    onClick={() => setIsDeleteDialogOpen(true)}
                 >
                     Delete
                 </button>
             </div>
+            <ConfirmDialog
+                isOpen={isDeleteDialogOpen}
+                title="Delete ticket?"
+                message={`Are you sure you want to delete "${ticket.title}"? This action cannot be undone.`}
+                onCancel={() => setIsDeleteDialogOpen(false)}
+                onConfirm={() => {
+                    setIsDeleteDialogOpen(false)
+                    onDeleteTicket(ticket.id)
+                }}
+            />
         </li>
     )
 }

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import styles from "./CreateTicketForm.module.css"
 import type { FormEvent } from "react"
-import type { Ticket, TicketPriority, TicketCategory } from "../../types/Ticket"
+import type { Ticket, TicketPriority, TicketCategory, CreateTicketInput } from "../../types/Ticket"
 
 type CreateTicketFormProps =
     | {
           mode: "create"
-          onCreateTicket: (ticket: Ticket) => void
+          onCreateTicket: (input: CreateTicketInput) => void
           editingTicket?: never
           onSaveTicket?: never
           onCancelEdit?: never
@@ -64,15 +64,11 @@ export default function CreateTicketForm(props: CreateTicketFormProps) {
 
             props.onSaveTicket(updatedTicket)
         } else {
-            const newTicket: Ticket = {
-                id: Date.now(),
+            const newTicket: CreateTicketInput = {
                 title: title.trim(),
                 description: description.trim(),
-                status: "open",
                 priority,
                 category,
-                createdAt: null,
-                updatedAt: null,
             }
 
             props.onCreateTicket(newTicket)

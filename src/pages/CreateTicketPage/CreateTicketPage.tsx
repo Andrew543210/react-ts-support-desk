@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import CreateTicketForm from "../../components/CreateTicketForm/CreateTicketForm"
-import type { Ticket } from "../../types/Ticket"
+import type { CreateTicketInput } from "../../types/Ticket"
 
 type CreateTicketPageProps = {
-    onCreateTicket: (ticket: Ticket) => void
+    onCreateTicket: (ticket: CreateTicketInput) => void
 }
 
 export default function CreateTicketPage({
@@ -11,7 +11,7 @@ export default function CreateTicketPage({
 }: CreateTicketPageProps) {
     const navigate = useNavigate()
 
-    function handleCreateTicket(ticket: Ticket) {
+    function handleCreateTicket(ticket: CreateTicketInput) {
         onCreateTicket(ticket)
         navigate("/tickets")
     }

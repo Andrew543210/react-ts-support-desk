@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { tickets as initialTickets } from "../data/tickets"
-import type { Ticket, TicketStatus, TicketCategory } from "../types/Ticket"
+import type { Ticket, TicketStatus, TicketCategory, CreateTicketInput } from "../types/Ticket"
 
 const STORAGE_KEY = "supportdesk:tickets"
 
@@ -100,27 +100,36 @@ export function useTickets() {
     } catch {
         return initialTickets
     }
-})
+    })
 
     useEffect(() => {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
-    } catch (error) {
-        console.error("Failed to save tickets:", error)
-    }
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
+        } catch (error) {
+            console.error("Failed to save tickets:", error)
+        }
     }, [tickets])
 
-    function createTicket(ticket: Ticket) {
-        const newTicket: Ticket = {
-            ...ticket,
-            createdAt: new Date().toISOString(),
-            updatedAt: null,
-        }
+    function createTicket(input: CreateTicketInput) {
+        const now = new Date().toISOString()
 
-        setTickets((currentTickets) => [
-            ...currentTickets,
-            newTicket,
-        ])
+        setTickets((currentTickets) => {
+            const nextId =
+                Math.max(0, ...currentTickets.map((ticket) => ticket.id)) + 1
+
+            const newTicket: Ticket = {
+                id: nextId,
+                title: input.title,
+                description: input.description,
+                priority: input.priority,
+                category: input.category,
+                status: "open",
+                createdAt: now,
+                updatedAt: null,
+            }
+
+            return [...currentTickets, newTicket]
+        })
     }
 
     function changeTicketStatus(id: number, newStatus: TicketStatus) {

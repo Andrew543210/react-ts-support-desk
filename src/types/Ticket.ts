@@ -10,6 +10,11 @@ export type TicketSort =
     | "priority-high"
     | "priority-low"
 
+export type CreateTicketInput = Pick<
+    Ticket,
+    "title" | "description" | "priority" | "category"
+>
+
 export type Ticket = {
     id: number;
     title: string;

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import CreateTicketForm from "../../components/CreateTicketForm/CreateTicketForm"
+import TicketForm from "../../components/TicketForm/TicketForm"
 import type { CreateTicketInput } from "../../types/Ticket"
 
 type CreateTicketPageProps = {
@@ -18,7 +18,7 @@ export default function CreateTicketPage({
 
     return (
         <section>
-            <CreateTicketForm
+            <TicketForm
                 mode="create"
                 onCreateTicket={handleCreateTicket}
             />

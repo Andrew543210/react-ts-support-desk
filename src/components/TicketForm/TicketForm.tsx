@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import styles from "./CreateTicketForm.module.css"
+import styles from "./TicketForm.module.css"
 import type { FormEvent } from "react"
 import type { Ticket, TicketPriority, TicketCategory, CreateTicketInput } from "../../types/Ticket"
 
-type CreateTicketFormProps =
+type TicketFormProps =
     | {
           mode: "create"
           onCreateTicket: (input: CreateTicketInput) => void
@@ -19,7 +19,7 @@ type CreateTicketFormProps =
           onCreateTicket?: never
       }
 
-export default function CreateTicketForm(props: CreateTicketFormProps) {
+export default function TicketForm(props: TicketFormProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [priority, setPriority] = useState<TicketPriority>("medium")

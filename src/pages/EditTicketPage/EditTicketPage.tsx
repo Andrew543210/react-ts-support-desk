@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
-import CreateTicketForm from "../../components/CreateTicketForm/CreateTicketForm"
+import TicketForm from "../../components/TicketForm/TicketForm"
 import type { Ticket } from "../../types/Ticket"
 
 type EditTicketPageProps = {
@@ -11,7 +11,7 @@ export default function EditTicketPage({
     tickets,
     onSaveTicket,
 }: EditTicketPageProps) {
-    
+
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -37,15 +37,15 @@ export default function EditTicketPage({
     }
 
     return (
-    <section>
-        <h1>Edit Ticket</h1>
+        <section>
+            <h1>Edit Ticket</h1>
 
-        <CreateTicketForm
-            mode="edit"
-            editingTicket={ticket}
-            onSaveTicket={handleSaveTicket}
-            onCancelEdit={handleCancelEdit}
-        />
-    </section>
-)
+            <TicketForm
+                mode="edit"
+                editingTicket={ticket}
+                onSaveTicket={handleSaveTicket}
+                onCancelEdit={handleCancelEdit}
+            />
+        </section>
+    )
 }

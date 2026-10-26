@@ -1,8 +1,31 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { tickets as initialTickets } from "../data/tickets"
 import type { Ticket, TicketStatus, TicketCategory, CreateTicketInput, TicketComment } from "../types/Ticket"
 
 const STORAGE_KEY = "supportdesk:tickets"
+
+const NEXT_ID_STORAGE_KEY = "supportdesk:nextTicketId"
+
+function getNextTicketId(tickets: Ticket[]): number {
+    const highestId = tickets.reduce(
+        (max, ticket) => Math.max(max, ticket.id),
+        0
+    )
+
+    try {
+        const storedValue = localStorage.getItem(NEXT_ID_STORAGE_KEY)
+        const storedNextId = storedValue === null ? 0 : Number(storedValue)
+
+        return Math.max(
+            highestId + 1,
+            Number.isSafeInteger(storedNextId) && storedNextId > 0
+                ? storedNextId
+                : 1
+        )
+    } catch {
+        return highestId + 1
+    }
+}
 
 function isTicketCategory(value: unknown): value is TicketCategory {
     return (
@@ -125,35 +148,39 @@ export function useTickets() {
     }
     })
 
+    const nextTicketId = useRef(getNextTicketId(tickets))
+
     useEffect(() => {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
-        } catch (error) {
-            console.error("Failed to save tickets:", error)
-        }
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
+        localStorage.setItem(
+            NEXT_ID_STORAGE_KEY,
+            String(nextTicketId.current)
+        )
+    } catch (error) {
+        console.error("Failed to save tickets:", error)
+    }
     }, [tickets])
 
     function createTicket(input: CreateTicketInput) {
         const now = new Date().toISOString()
 
-        setTickets((currentTickets) => {
-            const nextId =
-                Math.max(0, ...currentTickets.map((ticket) => ticket.id)) + 1
+        const id = nextTicketId.current
+        nextTicketId.current += 1
 
-            const newTicket: Ticket = {
-                id: nextId,
-                title: input.title,
-                description: input.description,
-                priority: input.priority,
-                category: input.category,
-                status: "open",
-                createdAt: now,
-                updatedAt: null,
-                comments: [],
-            }
+        const newTicket: Ticket = {
+            id,
+            title: input.title,
+            description: input.description,
+            priority: input.priority,
+            category: input.category,
+            status: "open",
+            createdAt: now,
+            updatedAt: null,
+            comments: [],
+        }
 
-            return [...currentTickets, newTicket]
-        })
+        setTickets((currentTickets) => [...currentTickets, newTicket])
     }
 
     function addTicketComment(ticketId: number, content: string) {

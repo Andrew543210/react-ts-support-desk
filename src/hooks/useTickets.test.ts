@@ -5,6 +5,7 @@ import { tickets as initialTickets } from "../data/tickets"
 import type { CreateTicketInput, Ticket } from "../types/Ticket"
 
 const STORAGE_KEY = "supportdesk:tickets"
+const NEXT_ID_STORAGE_KEY = "supportdesk:nextTicketId"
 
 const makeTicket = (
     overrides: Record<string, unknown> = {},
@@ -358,7 +359,7 @@ describe("useTickets", () => {
                 result.current.createTicket(makeInput())
             })
 
-            expect(result.current.tickets.at(-1)?.id).toBe(3)
+            expect(result.current.tickets.at(-1)?.id).toBe(6)
         })
 
         it("preserves existing tickets when creating a new ticket", () => {
@@ -387,6 +388,42 @@ describe("useTickets", () => {
             expect(
                 JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]"),
             ).toEqual(result.current.tickets)
+        })
+
+        it("keeps the next ID after deletion and remounting", () => {
+            saveStoredTickets([makeTicket({ id: 5 })])
+
+            const { result, unmount } = renderHook(() => useTickets())
+
+            act(() => {
+                result.current.deleteTicket(5)
+            })
+
+            expect(localStorage.getItem(NEXT_ID_STORAGE_KEY)).toBe("6")
+
+            unmount()
+
+            const { result: reloaded } = renderHook(() => useTickets())
+
+            act(() => {
+                reloaded.current.createTicket(makeInput())
+            })
+
+            expect(reloaded.current.tickets.at(-1)?.id).toBe(6)
+        })
+
+        it("assigns different IDs when creating two tickets in one act", () => {
+            saveStoredTickets([])
+
+            const { result } = renderHook(() => useTickets())
+
+            act(() => {
+                result.current.createTicket(makeInput())
+                result.current.createTicket(makeInput())
+            })
+
+            expect(result.current.tickets.map((ticket) => ticket.id))
+                .toEqual([1, 2])
         })
     })
 

@@ -26,7 +26,7 @@ function fillRequiredFields(title: string, description: string) {
 
 describe("TicketForm — create mode", () => {
     it("renders all fields and default values", () => {
-        render(<TicketForm mode="create" onCreateTicket={vi.fn()} />)
+        render(<TicketForm mode="create" onCreateTicket={vi.fn(() => true)} />)
 
         expect(screen.getByRole("textbox", { name: "Title" })).toHaveValue("")
         expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue("")
@@ -37,7 +37,8 @@ describe("TicketForm — create mode", () => {
     })
 
     it("creates a ticket with trimmed text and selected values", () => {
-        const onCreateTicket = vi.fn<(input: CreateTicketInput) => void>()
+        const onCreateTicket = vi.fn<(input: CreateTicketInput) => boolean>()
+            .mockReturnValue(true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)
 
         fillRequiredFields("  Login problem  ", "  Cannot access my account.  ")
@@ -58,7 +59,7 @@ describe("TicketForm — create mode", () => {
     })
 
     it("requires a title", () => {
-        const onCreateTicket = vi.fn()
+        const onCreateTicket = vi.fn(() => true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)
 
         fillRequiredFields("   ", "A description")
@@ -69,7 +70,7 @@ describe("TicketForm — create mode", () => {
     })
 
     it("requires a description", () => {
-        const onCreateTicket = vi.fn()
+        const onCreateTicket = vi.fn(() => true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)
 
         fillRequiredFields("A title", "   ")
@@ -80,7 +81,7 @@ describe("TicketForm — create mode", () => {
     })
 
     it("requires both title and description", () => {
-        const onCreateTicket = vi.fn()
+        const onCreateTicket = vi.fn(() => true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)
 
         fireEvent.click(screen.getByRole("button", { name: "Create Ticket" }))
@@ -90,7 +91,7 @@ describe("TicketForm — create mode", () => {
     })
 
     it("clears the validation error after a successful submission", () => {
-        const onCreateTicket = vi.fn()
+        const onCreateTicket = vi.fn(() => true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)
 
         fireEvent.click(screen.getByRole("button", { name: "Create Ticket" }))
@@ -104,7 +105,7 @@ describe("TicketForm — create mode", () => {
     })
 
     it("resets fields to their defaults after successful creation", () => {
-        render(<TicketForm mode="create" onCreateTicket={vi.fn()} />)
+        render(<TicketForm mode="create" onCreateTicket={vi.fn(() => true)} />)
 
         fillRequiredFields("A title", "A description")
         fireEvent.change(screen.getByRole("combobox", { name: "Priority" }), {
@@ -120,6 +121,35 @@ describe("TicketForm — create mode", () => {
         expect(screen.getByRole("combobox", { name: "Priority" })).toHaveValue("medium")
         expect(screen.getByRole("combobox", { name: "Category" })).toHaveValue("general")
     })
+
+    it("keeps entered values when creation fails", () => {
+        const onCreateTicket = vi.fn(() => false)
+
+        render(
+            <TicketForm
+                mode="create"
+                onCreateTicket={onCreateTicket}
+            />
+        )
+
+        fillRequiredFields("Important issue", "Please investigate")
+
+        fireEvent.click(
+            screen.getByRole("button", {
+                name: "Create Ticket",
+            })
+        )
+
+        expect(onCreateTicket).toHaveBeenCalledOnce()
+
+        expect(
+            screen.getByRole("textbox", { name: "Title" })
+        ).toHaveValue("Important issue")
+
+        expect(
+            screen.getByRole("textbox", { name: "Description" })
+        ).toHaveValue("Please investigate")
+    })
 })
 
 describe("TicketForm — edit mode", () => {
@@ -128,7 +158,7 @@ describe("TicketForm — edit mode", () => {
             <TicketForm
                 mode="edit"
                 editingTicket={editingTicket}
-                onSaveTicket={vi.fn()}
+                onSaveTicket={vi.fn(() => true)}
                 onCancelEdit={vi.fn()}
             />,
         )
@@ -142,7 +172,8 @@ describe("TicketForm — edit mode", () => {
     })
 
     it("saves updated values while preserving the other ticket fields", () => {
-        const onSaveTicket = vi.fn<(ticket: Ticket) => void>()
+        const onSaveTicket = vi.fn<(ticket: Ticket) => boolean>()
+            .mockReturnValue(true)
         render(
             <TicketForm
                 mode="edit"
@@ -171,7 +202,7 @@ describe("TicketForm — edit mode", () => {
     })
 
     it("does not save when required fields are empty", () => {
-        const onSaveTicket = vi.fn()
+        const onSaveTicket = vi.fn(() => true)
         render(
             <TicketForm
                 mode="edit"
@@ -194,7 +225,7 @@ describe("TicketForm — edit mode", () => {
             <TicketForm
                 mode="edit"
                 editingTicket={editingTicket}
-                onSaveTicket={vi.fn()}
+                onSaveTicket={vi.fn(() => true)}
                 onCancelEdit={onCancelEdit}
             />,
         )
@@ -209,7 +240,7 @@ describe("TicketForm — edit mode", () => {
             <TicketForm
                 mode="edit"
                 editingTicket={editingTicket}
-                onSaveTicket={vi.fn()}
+                onSaveTicket={vi.fn(() => true)}
                 onCancelEdit={vi.fn()}
             />,
         )
@@ -221,5 +252,44 @@ describe("TicketForm — edit mode", () => {
         expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue("")
         expect(screen.getByRole("combobox", { name: "Priority" })).toHaveValue("medium")
         expect(screen.getByRole("combobox", { name: "Category" })).toHaveValue("general")
+    })
+    it("keeps edited values when saving fails", () => {
+        const onSaveTicket = vi.fn(() => false)
+
+        render(
+            <TicketForm
+                mode="edit"
+                editingTicket={editingTicket}
+                onSaveTicket={onSaveTicket}
+                onCancelEdit={vi.fn()}
+            />,
+        )
+
+        fillRequiredFields("Unpublished title", "Unpublished description")
+        fireEvent.change(
+            screen.getByRole("combobox", { name: "Priority" }),
+            { target: { value: "low" } },
+        )
+        fireEvent.change(
+            screen.getByRole("combobox", { name: "Category" }),
+            { target: { value: "billing" } },
+        )
+        fireEvent.click(screen.getByRole("button", { name: "Update Ticket" }))
+
+        expect(onSaveTicket).toHaveBeenCalledExactlyOnceWith({
+            ...editingTicket,
+            title: "Unpublished title",
+            description: "Unpublished description",
+            priority: "low",
+            category: "billing",
+        })
+        expect(screen.getByRole("textbox", { name: "Title" }))
+            .toHaveValue("Unpublished title")
+        expect(screen.getByRole("textbox", { name: "Description" }))
+            .toHaveValue("Unpublished description")
+        expect(screen.getByRole("combobox", { name: "Priority" }))
+            .toHaveValue("low")
+        expect(screen.getByRole("combobox", { name: "Category" }))
+            .toHaveValue("billing")
     })
 })

@@ -4,7 +4,7 @@ import type { Ticket } from "../../types/Ticket"
 
 type EditTicketPageProps = {
     tickets: Ticket[]
-    onSaveTicket: (ticket: Ticket) => void
+    onSaveTicket: (ticket: Ticket) => boolean
 }
 
 export default function EditTicketPage({
@@ -20,8 +20,13 @@ export default function EditTicketPage({
     const ticket = tickets.find((ticket) => ticket.id === ticketId)
 
     function handleSaveTicket(updatedTicket: Ticket) {
-        onSaveTicket(updatedTicket)
-        navigate("/tickets")
+        const saved = onSaveTicket(updatedTicket)
+
+        if (saved) {
+            navigate("/tickets")
+        }
+
+        return saved
     }
 
     function handleCancelEdit() {

@@ -6,15 +6,15 @@ import type { Ticket, TicketPriority, TicketCategory, CreateTicketInput } from "
 type TicketFormProps =
     | {
           mode: "create"
-          onCreateTicket: (input: CreateTicketInput) => void
+          onCreateTicket: (input: CreateTicketInput) => boolean
           editingTicket?: never
-          onSaveTicket?: never
+          onSaveTicket?: boolean
           onCancelEdit?: never
       }
     | {
           mode: "edit"
           editingTicket: Ticket
-          onSaveTicket: (ticket: Ticket) => void
+          onSaveTicket: (ticket: Ticket) => boolean
           onCancelEdit: () => void
           onCreateTicket?: never
       }
@@ -57,7 +57,9 @@ export default function TicketForm(props: TicketFormProps) {
                 category,
             }
 
-            props.onSaveTicket(updatedTicket)
+           if (!props.onSaveTicket(updatedTicket)) {
+                return
+            }
         } else {
             const newTicket: CreateTicketInput = {
                 title: title.trim(),
@@ -66,7 +68,9 @@ export default function TicketForm(props: TicketFormProps) {
                 category,
             }
 
-            props.onCreateTicket(newTicket)
+           if (!props.onCreateTicket(newTicket)) {
+                return
+            }
         }
 
         setTitle("")

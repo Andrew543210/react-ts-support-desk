@@ -25,7 +25,7 @@ function renderDetails(path: string, tickets: Ticket[]) {
                     element={
                         <TicketDetailsPage
                             tickets={tickets}
-                            onAddComment={vi.fn()}
+                            onAddComment={vi.fn(() => true)}
                         />
                     }
                 />

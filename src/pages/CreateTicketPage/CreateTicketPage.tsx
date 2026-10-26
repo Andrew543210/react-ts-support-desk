@@ -3,7 +3,7 @@ import TicketForm from "../../components/TicketForm/TicketForm"
 import type { CreateTicketInput } from "../../types/Ticket"
 
 type CreateTicketPageProps = {
-    onCreateTicket: (ticket: CreateTicketInput) => void
+    onCreateTicket: (ticket: CreateTicketInput) => boolean
 }
 
 export default function CreateTicketPage({
@@ -12,8 +12,13 @@ export default function CreateTicketPage({
     const navigate = useNavigate()
 
     function handleCreateTicket(ticket: CreateTicketInput) {
-        onCreateTicket(ticket)
-        navigate("/tickets")
+        const saved = onCreateTicket(ticket)
+
+        if (saved) {
+            navigate("/tickets")
+        }
+
+        return saved
     }
 
     return (

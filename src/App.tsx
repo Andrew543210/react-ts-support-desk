@@ -24,32 +24,51 @@ function App() {
 
     const { showToast } = useToast()
 
+    function reportResult(saved: boolean, successMessage: string): boolean {
+        showToast(
+            saved
+                ? successMessage
+                : "Could not save changes. Please try again."
+        )
+        return saved
+    }
+
     function handleCreateTicket(input: CreateTicketInput) {
-        createTicket(input)
-        showToast("Ticket created successfully")
+        return reportResult(
+            createTicket(input),
+            "Ticket created successfully"
+        )
     }
 
     function handleUpdateTicket(ticket: Ticket) {
-        updateTicket(ticket)
-        showToast("Ticket updated successfully")
+        return reportResult(
+            updateTicket(ticket),
+            "Ticket updated successfully"
+        )
     }
 
     function handleChangeTicketStatus(
         id: number,
         status: TicketStatus
     ) {
-        changeTicketStatus(id, status)
-        showToast("Ticket status updated")
+        reportResult(
+            changeTicketStatus(id, status),
+            "Ticket status updated"
+        )
     }
 
     function handleAddComment(ticketId: number, content: string) {
-        addTicketComment(ticketId, content)
-        showToast("Comment added successfully")
+        return reportResult(
+            addTicketComment(ticketId, content),
+            "Comment added successfully"
+        )
     }
 
     function handleDeleteTicket(id: number) {
-        deleteTicket(id)
-        showToast("Ticket deleted successfully")
+        reportResult(
+            deleteTicket(id),
+            "Ticket deleted successfully"
+        )
     }
 
 

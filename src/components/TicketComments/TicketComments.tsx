@@ -5,7 +5,7 @@ import styles from "./TicketComments.module.css"
 
 type TicketCommentsProps = {
     ticket: Ticket
-    onAddComment: (ticketId: number, content: string) => void
+    onAddComment: (ticketId: number, content: string) => boolean
 }
 
 export default function TicketComments({
@@ -22,8 +22,9 @@ export default function TicketComments({
 
         if (!trimmedContent) return
 
-        onAddComment(ticket.id, trimmedContent)
-        setContent("")
+        if (onAddComment(ticket.id, trimmedContent)) {
+            setContent("")
+        }
     }
 
     return (

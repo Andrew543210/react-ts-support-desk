@@ -20,7 +20,7 @@ const ticket: Ticket = {
 describe("TicketComments", () => {
     it("submits a trimmed comment and clears the form", async () => {
         const user = userEvent.setup()
-        const onAddComment = vi.fn()
+        const onAddComment = vi.fn(() => true)
 
         render(
             <TicketComments
@@ -52,5 +52,32 @@ describe("TicketComments", () => {
 
         expect(textarea).toHaveValue("")
         expect(button).toBeDisabled()
+    })
+    it("keeps the comment text when saving fails", async () => {
+        const user = userEvent.setup()
+        const onAddComment = vi.fn(() => false)
+
+        render(
+            <TicketComments
+                ticket={ticket}
+                onAddComment={onAddComment}
+            />,
+        )
+
+        const textarea = screen.getByRole("textbox", {
+            name: "Add a comment",
+        })
+
+        await user.type(textarea, "Important comment")
+        await user.click(screen.getByRole("button", { name: "Add comment" }))
+
+        expect(onAddComment).toHaveBeenCalledExactlyOnceWith(
+            ticket.id,
+            "Important comment",
+        )
+        expect(textarea).toHaveValue("Important comment")
+        expect(
+            screen.getByRole("button", { name: "Add comment" }),
+        ).toBeEnabled()
     })
 })

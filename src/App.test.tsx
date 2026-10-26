@@ -1,9 +1,10 @@
-
-import { describe, expect, it, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import App from "./App"
 import ToastProvider from "./components/ToastProvider/ToastProvider"
+
+const createTicketMock = vi.hoisted(() => vi.fn(() => true))
 
 vi.mock("./hooks/useTickets", () => ({
     useTickets: () => ({
@@ -20,7 +21,7 @@ vi.mock("./hooks/useTickets", () => ({
                 comments: [],
             },
         ],
-        createTicket: vi.fn(),
+        createTicket: createTicketMock,
         changeTicketStatus: vi.fn(),
         deleteTicket: vi.fn(),
         updateTicket: vi.fn(),
@@ -39,6 +40,11 @@ function renderApp(path: string) {
 }
 
 describe("App", () => {
+    beforeEach(() => {
+        createTicketMock.mockReset()
+        createTicketMock.mockReturnValue(true)
+    })
+
     it("renders the shared header and sidebar", () => {
         renderApp("/")
 
@@ -101,5 +107,50 @@ describe("App", () => {
         expect(
             screen.getByRole("heading", { name: "Ticket not found" }),
         ).toBeInTheDocument()
+    })
+
+    it("shows an error and keeps the form when ticket creation fails", () => {
+        createTicketMock.mockReturnValue(false)
+
+        renderApp("/tickets/new")
+
+        fireEvent.change(
+            screen.getByRole("textbox", { name: "Title" }),
+            { target: { value: "Important issue" } }
+        )
+
+        fireEvent.change(
+            screen.getByRole("textbox", { name: "Description" }),
+            { target: { value: "Please investigate" } }
+        )
+
+        fireEvent.click(
+            screen.getByRole("button", { name: "Create Ticket" })
+        )
+
+        expect(createTicketMock).toHaveBeenCalledWith({
+            title: "Important issue",
+            description: "Please investigate",
+            priority: "medium",
+            category: "general",
+        })
+
+        expect(
+            screen.getByText(
+                "Could not save changes. Please try again."
+            )
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByRole("heading", { name: "Create Ticket" })
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByRole("textbox", { name: "Title" })
+        ).toHaveValue("Important issue")
+
+        expect(
+            screen.getByRole("textbox", { name: "Description" })
+        ).toHaveValue("Please investigate")
     })
 })

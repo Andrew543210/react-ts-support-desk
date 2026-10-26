@@ -6,7 +6,7 @@
 
     type TicketDetailsPageProps = {
         tickets: Ticket[]
-        onAddComment: (ticketId: number, content: string) => void
+        onAddComment: (ticketId: number, content: string) => boolean
     }
 
     function formatTicketDate(value: string | null): string {

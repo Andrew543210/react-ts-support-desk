@@ -158,25 +158,59 @@ export function useTickets() {
         }
     })
 
+    const ticketsRef = useRef(tickets)
     const nextTicketId = useRef(getNextTicketId(tickets))
 
     useEffect(() => {
+    try {
+        localStorage.setItem(
+            NEXT_ID_STORAGE_KEY,
+            String(nextTicketId.current)
+        )
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(ticketsRef.current)
+        )
+    } catch (error) {
+        console.error("Failed to save tickets:", error)
+    }
+    }, [])
+
+    function persistTickets(
+        nextTickets: Ticket[],
+        nextId = nextTicketId.current
+    ): boolean {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
             localStorage.setItem(
                 NEXT_ID_STORAGE_KEY,
-                String(nextTicketId.current)
+                String(nextId)
+            )
+
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(nextTickets)
             )
         } catch (error) {
             console.error("Failed to save tickets:", error)
+            return false
         }
-    }, [tickets])
 
-    function createTicket(input: CreateTicketInput) {
+        ticketsRef.current = nextTickets
+        nextTicketId.current = nextId
+
+        setTickets(nextTickets)
+
+        return true
+    }
+
+    function createTicket(input: CreateTicketInput): boolean {
         const now = new Date().toISOString()
-
         const id = nextTicketId.current
-        nextTicketId.current += 1
+
+        if (!Number.isSafeInteger(id + 1)) {
+            return false
+        }
 
         const newTicket: Ticket = {
             id,
@@ -190,13 +224,24 @@ export function useTickets() {
             comments: [],
         }
 
-        setTickets((currentTickets) => [...currentTickets, newTicket])
+        return persistTickets(
+            [...ticketsRef.current, newTicket],
+            id + 1
+        )
     }
 
-    function addTicketComment(ticketId: number, content: string) {
+    function addTicketComment(
+        ticketId: number,
+        content: string
+    ): boolean {
         const trimmedContent = content.trim()
 
-        if (!trimmedContent) return
+        if (
+            !trimmedContent ||
+            !ticketsRef.current.some((ticket) => ticket.id === ticketId)
+        ) {
+            return false
+        }
 
         const newComment: TicketComment = {
             id: crypto.randomUUID(),
@@ -205,55 +250,84 @@ export function useTickets() {
             createdAt: new Date().toISOString(),
         }
 
-        setTickets((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === ticketId
-                    ? {
-                        ...ticket,
-                        comments: [...ticket.comments, newComment],
-                        updatedAt: newComment.createdAt,
-                    }
-                    : ticket
-            )
+        const nextTickets = ticketsRef.current.map((ticket) =>
+            ticket.id === ticketId
+                ? {
+                    ...ticket,
+                    comments: [...ticket.comments, newComment],
+                    updatedAt: newComment.createdAt,
+                }
+                : ticket
         )
+
+        return persistTickets(nextTickets)
     }
 
-    function changeTicketStatus(id: number, newStatus: TicketStatus) {
+    function changeTicketStatus(
+        id: number,
+        newStatus: TicketStatus
+    ): boolean {
+        const target = ticketsRef.current.find(
+            (ticket) => ticket.id === id
+        )
+
+        if (!target) {
+            return false
+        }
+
+        if (target.status === newStatus) {
+            return true
+        }
+
         const now = new Date().toISOString()
 
-        setTickets((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === id && ticket.status !== newStatus
-                    ? {
-                        ...ticket,
-                        status: newStatus,
-                        updatedAt: now,
-                    }
-                    : ticket
+        const nextTickets = ticketsRef.current.map((ticket) =>
+            ticket.id === id
+                ? {
+                    ...ticket,
+                    status: newStatus,
+                    updatedAt: now,
+                }
+                : ticket
+        )
+
+        return persistTickets(nextTickets)
+    }
+
+    function deleteTicket(id: number): boolean {
+        if (!ticketsRef.current.some((ticket) => ticket.id === id)) {
+            return false
+        }
+
+        const nextTickets = ticketsRef.current.filter(
+            (ticket) => ticket.id !== id
+        )
+
+        return persistTickets(nextTickets)
+    }
+
+    function updateTicket(updatedTicket: Ticket): boolean {
+        if (
+            !ticketsRef.current.some(
+                (ticket) => ticket.id === updatedTicket.id
             )
-        )
-    }
+        ) {
+            return false
+        }
 
-    function deleteTicket(id: number) {
-        setTickets((currentTickets) =>
-            currentTickets.filter((ticket) => ticket.id !== id)
-        )
-    }
-
-    function updateTicket(updatedTicket: Ticket) {
         const now = new Date().toISOString()
 
-        setTickets((currentTickets) =>
-            currentTickets.map((ticket) =>
-                ticket.id === updatedTicket.id
-                    ? {
-                        ...updatedTicket,
-                        createdAt: ticket.createdAt ?? null,
-                        updatedAt: now,
-                    }
-                    : ticket
-            )
+        const nextTickets = ticketsRef.current.map((ticket) =>
+            ticket.id === updatedTicket.id
+                ? {
+                    ...updatedTicket,
+                    createdAt: ticket.createdAt ?? null,
+                    updatedAt: now,
+                }
+                : ticket
         )
+
+        return persistTickets(nextTickets)
     }
 
     return {

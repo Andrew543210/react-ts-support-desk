@@ -11,7 +11,7 @@ vi.mock("../../components/TicketForm/TicketForm", () => ({
         onCancelEdit,
     }: {
         editingTicket: Ticket
-        onSaveTicket: (ticket: Ticket) => void
+        onSaveTicket: (ticket: Ticket) => boolean
         onCancelEdit: () => void
     }) => (
         <div>
@@ -46,7 +46,7 @@ const ticket: Ticket = {
     comments: [],
 }
 
-function renderEditPage(path: string, tickets: Ticket[], onSaveTicket = vi.fn()) {
+function renderEditPage(path: string, tickets: Ticket[], onSaveTicket = vi.fn(() => true)) {
     render(
         <MemoryRouter initialEntries={[path]}>
             <Routes>
@@ -116,5 +116,26 @@ describe("EditTicketPage", () => {
         expect(
             screen.getByRole("heading", { name: "Tickets page reached" }),
         ).toBeInTheDocument()
+    })
+    
+    it("stays on the edit page when saving fails", () => {
+        const onSaveTicket = vi.fn(() => false)
+        renderEditPage("/tickets/1/edit", [ticket], onSaveTicket)
+
+        fireEvent.click(
+            screen.getByRole("button", { name: "Save test ticket" }),
+        )
+
+        expect(onSaveTicket).toHaveBeenCalledExactlyOnceWith({
+            ...ticket,
+            title: "Updated ticket",
+        })
+        expect(
+            screen.getByRole("heading", { name: "Edit Ticket" }),
+        ).toBeInTheDocument()
+        expect(screen.getByText("Editing: Original ticket")).toBeInTheDocument()
+        expect(
+            screen.queryByRole("heading", { name: "Tickets page reached" }),
+        ).not.toBeInTheDocument()
     })
 })

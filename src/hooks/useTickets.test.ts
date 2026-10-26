@@ -483,6 +483,45 @@ describe("useTickets", () => {
             expect(result.current.tickets.map((ticket) => ticket.id))
                 .toEqual([1, 2])
         })
+
+        it("keeps state unchanged when saving a new ticket fails", () => {
+            saveStoredTickets([])
+
+            const { result } = renderHook(() => useTickets())
+
+            const errorSpy = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {})
+
+            const setItemSpy = vi
+                .spyOn(Storage.prototype, "setItem")
+                .mockImplementation((key) => {
+                    if (key === STORAGE_KEY) {
+                        throw new Error("Storage unavailable")
+                    }
+                })
+
+            let saved = true
+
+            act(() => {
+                saved = result.current.createTicket(makeInput())
+            })
+
+            expect(saved).toBe(false)
+            expect(result.current.tickets).toEqual([])
+            expect(localStorage.getItem(STORAGE_KEY)).toBe("[]")
+            expect(errorSpy).toHaveBeenCalled()
+
+            setItemSpy.mockRestore()
+
+            act(() => {
+                saved = result.current.createTicket(makeInput())
+            })
+
+            expect(saved).toBe(true)
+            expect(result.current.tickets).toHaveLength(1)
+            expect(result.current.tickets[0].id).toBe(1)
+        })
     })
 
     describe("updateTicket", () => {
@@ -670,6 +709,34 @@ describe("useTickets", () => {
                 JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]"),
             ).toEqual(result.current.tickets)
             expect(result.current.tickets).toHaveLength(1)
+        })
+
+        it("does not delete a ticket when persistence fails", () => {
+            const ticket = makeTicket()
+            saveStoredTickets([ticket])
+
+            const { result } = renderHook(() => useTickets())
+
+            vi.spyOn(console, "error").mockImplementation(() => {})
+
+            vi.spyOn(Storage.prototype, "setItem")
+                .mockImplementation((key) => {
+                    if (key === STORAGE_KEY) {
+                        throw new Error("Storage unavailable")
+                    }
+                })
+
+            let deleted = true
+
+            act(() => {
+                deleted = result.current.deleteTicket(ticket.id)
+            })
+
+            expect(deleted).toBe(false)
+            expect(result.current.tickets).toEqual([ticket])
+            expect(
+                JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]")
+            ).toEqual([ticket])
         })
     })
 

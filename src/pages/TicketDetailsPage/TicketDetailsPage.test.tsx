@@ -62,15 +62,29 @@ describe("TicketDetailsPage", () => {
     })
 
     it("formats the creation date and last-updated date", () => {
+        const createdAt = "2026-10-10T10:00:00.000Z"
+        const updatedAt = "2026-10-12T14:30:00.000Z"
+
         renderDetails("/tickets/7", [
             {
                 ...ticket,
-                updatedAt: "2026-10-12T14:30:00.000Z",
+                createdAt,
+                updatedAt,
             },
         ])
 
-        expect(screen.getByText("Oct 10, 2026, 1:00 PM")).toBeInTheDocument()
-        expect(screen.getByText("Oct 12, 2026, 5:30 PM")).toBeInTheDocument()
+        const formatter = new Intl.DateTimeFormat("en-US", {
+            dateStyle: "medium",
+            timeStyle: "short",
+        })
+
+        expect(
+            screen.getByText(formatter.format(new Date(createdAt)))
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByText(formatter.format(new Date(updatedAt)))
+        ).toBeInTheDocument()
     })
 
     it("provides links back to tickets and to editing", () => {

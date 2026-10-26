@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard/Dashboard"
 import TicketsPage from "./pages/TicketsPage/TicketsPage"
 import EditTicketPage from "./pages/EditTicketPage/EditTicketPage"
 import CreateTicketPage from "./pages/CreateTicketPage/CreateTicketPage"
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage"
 import { useToast } from "./hooks/useToast"
 import TicketDetailsPage from "./pages/TicketDetailsPage/TicketDetailsPage"
 import styles from "./App.module.css"
@@ -120,6 +121,7 @@ function App() {
                  />
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
     </div>

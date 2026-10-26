@@ -153,4 +153,20 @@ describe("App", () => {
             screen.getByRole("textbox", { name: "Description" })
         ).toHaveValue("Please investigate")
     })
+
+    it("renders the not-found page for an unknown route", () => {
+        renderApp("/unknown-route")
+
+        expect(
+            screen.getByRole("heading", {
+                name: "Page not found",
+            })
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByRole("link", {
+                name: "Back to Dashboard",
+            })
+        ).toHaveAttribute("href", "/")
+    })
 })

@@ -58,6 +58,63 @@ describe("TicketForm — create mode", () => {
         })
     })
 
+    it.each([
+        ["Title", "", "Some description", "Description"],
+        ["Description", "Some title", "", "Title"],
+    ])(
+        "marks the missing %s field as invalid and associates the error",
+        (invalidName, title, description, validName) => {
+        render(
+            <TicketForm
+                mode="create"
+                onCreateTicket={vi.fn(() => true)}
+            />
+        )
+
+        fillRequiredFields(title, description)
+
+        fireEvent.click(
+            screen.getByRole("button", {
+                name: "Create Ticket",
+            })
+        )
+
+        const invalidField = screen.getByRole("textbox", {
+            name: invalidName,
+        })
+
+        const validField = screen.getByRole("textbox", {
+            name: validName,
+        })
+
+        const alert = screen.getByRole("alert")
+
+        expect(alert).toHaveTextContent(
+            "Title and description are required."
+        )
+
+        expect(invalidField).toHaveAttribute(
+            "aria-required",
+            "true"
+        )
+
+        expect(invalidField).toHaveAttribute(
+            "aria-invalid",
+            "true"
+        )
+
+        expect(invalidField).toHaveAttribute(
+            "aria-describedby",
+            alert.id
+        )
+
+        expect(validField).toHaveAttribute(
+            "aria-invalid",
+            "false"
+        )
+    }
+)
+
     it("requires a title", () => {
         const onCreateTicket = vi.fn(() => true)
         render(<TicketForm mode="create" onCreateTicket={onCreateTicket} />)

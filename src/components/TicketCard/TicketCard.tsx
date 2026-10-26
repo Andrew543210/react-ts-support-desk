@@ -44,9 +44,13 @@ export default function TicketCard({ ticket, onStatusChange, onDeleteTicket, onE
                     View Details
                 </Link>
                 <select
+                    aria-label={`Change status for ticket #${ticket.id}: ${ticket.title}`}
                     value={ticket.status}
                     onChange={(e) =>
-                        onStatusChange(ticket.id, e.target.value as TicketStatus)
+                        onStatusChange(
+                            ticket.id,
+                            e.target.value as TicketStatus
+                        )
                     }
                 >
                     <option value="open">Open</option>

@@ -41,7 +41,6 @@
   background: var(--color-surface);
   color: var(--color-text-primary);
   font: inherit;
-  outline: none;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -52,6 +51,13 @@
 .group select:focus {
   border-color: var(--color-mint-500);
   box-shadow: 0 0 0 3px rgba(58, 174, 140, 0.12);
+}
+
+.group input:focus-visible,
+.group textarea:focus-visible,
+.group select:focus-visible {
+    outline: 2px solid var(--color-mint-700);
+    outline-offset: 2px;
 }
 
 .group textarea {
@@ -68,14 +74,14 @@
   padding: 10px 16px;
   border: 1px solid var(--color-mint-500);
   border-radius: var(--radius-md);
-  background: var(--color-mint-500);
+  background: var(--color-mint-700);
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
 .primaryButton:hover {
-  background: var(--color-mint-700);
+  background: var(--color-mint-900);
   border-color: var(--color-mint-700);
 }
 

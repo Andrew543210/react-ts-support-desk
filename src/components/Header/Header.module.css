@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
-  background: var(--color-mint-500);
+  background: var(--color-mint-700);
   color: white;
   font-weight: 700;
 }

@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
@@ -58,6 +59,37 @@ describe("App", () => {
         expect(
             screen.getByRole("link", { name: "Create Ticket" }),
         ).toBeInTheDocument()
+    })
+
+    it("lets keyboard users skip navigation and reach main content", async () => {
+        const user = userEvent.setup()
+
+        renderApp("/")
+
+        const skipLink = screen.getByRole("link", {
+            name: "Skip to main content",
+        })
+
+        const main = screen.getByRole("main")
+
+        expect(skipLink).toHaveAttribute(
+            "href",
+            "#main-content"
+        )
+
+        expect(main).toHaveAttribute(
+            "id",
+            "main-content"
+        )
+
+        expect(main).toHaveAttribute(
+            "tabindex",
+            "-1"
+        )
+
+        await user.tab()
+
+        expect(skipLink).toHaveFocus()
     })
 
     it("renders the dashboard route", () => {

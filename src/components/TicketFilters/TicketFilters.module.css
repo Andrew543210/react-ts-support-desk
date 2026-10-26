@@ -25,7 +25,6 @@
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text-primary);
-  outline: none;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -35,6 +34,12 @@
 .group select:focus {
   border-color: var(--color-mint-500);
   box-shadow: 0 0 0 3px rgba(58, 174, 140, 0.12);
+}
+
+.group input:focus-visible,
+.group select:focus-visible {
+    outline: 2px solid var(--color-mint-700);
+    outline-offset: 2px;
 }
 
 @media (max-width: 900px) {

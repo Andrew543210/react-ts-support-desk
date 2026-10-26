@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useId } from "react"
 import styles from "./TicketForm.module.css"
 import type { FormEvent } from "react"
 import type { Ticket, TicketPriority, TicketCategory, CreateTicketInput } from "../../types/Ticket"
@@ -8,7 +8,7 @@ type TicketFormProps =
           mode: "create"
           onCreateTicket: (input: CreateTicketInput) => boolean
           editingTicket?: never
-          onSaveTicket?: boolean
+          onSaveTicket?: never
           onCancelEdit?: never
       }
     | {
@@ -37,6 +37,9 @@ export default function TicketForm(props: TicketFormProps) {
     )
 
     const [error, setError] = useState("")
+    const validationErrorId = useId()
+    const titleInvalid = Boolean(error) && !title.trim()
+    const descriptionInvalid = Boolean(error) && !description.trim()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -90,6 +93,11 @@ export default function TicketForm(props: TicketFormProps) {
                     <input
                         type="text"
                         id="ticket-title"
+                        aria-required="true"
+                        aria-invalid={titleInvalid}
+                        aria-describedby={
+                            titleInvalid ? validationErrorId : undefined
+                        }
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
@@ -99,6 +107,11 @@ export default function TicketForm(props: TicketFormProps) {
                     <label htmlFor="ticket-description">Description</label>
                     <textarea
                         id="ticket-description"
+                        aria-required="true"
+                        aria-invalid={descriptionInvalid}
+                        aria-describedby={
+                            descriptionInvalid ? validationErrorId : undefined
+                        }
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
@@ -136,7 +149,11 @@ export default function TicketForm(props: TicketFormProps) {
                 </div>
 
                 {error && (
-                    <p className={styles.error}>
+                    <p
+                        id={validationErrorId}
+                        className={styles.error}
+                        role="alert"
+                    >
                         {error}
                     </p>
                 )}

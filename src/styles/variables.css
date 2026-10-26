@@ -6,6 +6,7 @@
   --color-mint-300: #9edcc9;
   --color-mint-500: #3aae8c;
   --color-mint-700: #247a65;
+  --color-mint-900: #185443;
 
   --color-text-primary: #18342d;
   --color-text-secondary: #60736d;
@@ -13,6 +14,7 @@
   --color-border: #d8e7e2;
 
   --color-danger: #c45c5c;
+  --color-danger-700: #a63333;
   --color-warning: #c68a35;
 
   --radius-sm: 6px;

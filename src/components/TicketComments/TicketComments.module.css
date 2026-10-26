@@ -82,7 +82,7 @@
 }
 
 .form textarea:focus-visible {
-    outline: 2px solid var(--color-mint-500);
+    outline: 2px solid var(--color-mint-700);
     outline-offset: 2px;
 }
 
@@ -91,7 +91,7 @@
     padding: 10px 18px;
     border: none;
     border-radius: var(--radius-sm);
-    background: var(--color-mint-500);
+    background: var(--color-mint-700);
     color: white;
     font: inherit;
     font-weight: 600;
@@ -99,7 +99,7 @@
 }
 
 .form button:hover:not(:disabled) {
-    background: var(--color-mint-700);
+    background: var(--color-mint-900);
 }
 
 .form button:disabled {

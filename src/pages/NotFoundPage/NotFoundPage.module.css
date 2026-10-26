@@ -34,7 +34,7 @@
     justify-content: center;
     padding: 10px 16px;
     border-radius: var(--radius-md);
-    background: var(--color-mint-500);
+    background: var(--color-mint-700);
     color: white;
     font-weight: 600;
     text-decoration: none;
@@ -42,7 +42,7 @@
 }
 
 .link:hover {
-    background: var(--color-mint-700);
+    background: var(--color-mint-900);
 }
 
 .link:focus-visible {

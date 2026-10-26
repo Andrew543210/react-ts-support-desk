@@ -59,6 +59,16 @@ describe("TicketCard", () => {
         ).toHaveAttribute("href", "/tickets/42")
     })
 
+    it("gives the status selector a ticket-specific accessible name", () => {
+        renderTicketCard()
+
+        expect(
+            screen.getByRole("combobox", {
+                name: "Change status for ticket #42: Cannot log in",
+            })
+        ).toHaveValue("open")
+    })
+
     it("shows the current status in the select", () => {
         renderTicketCard()
 

@@ -145,6 +145,64 @@ describe("useTickets", () => {
             ])
         })
 
+        it("keeps only the first valid ticket for each ID", () => {
+            const firstTicket = makeTicket({
+                id: 101,
+                title: "First ticket",
+            })
+
+            const duplicateTicket = makeTicket({
+                id: 101,
+                title: "Duplicate ticket",
+            })
+
+            const secondTicket = makeTicket({
+                id: 102,
+                title: "Second ticket",
+            })
+
+            saveStoredTickets([
+                firstTicket,
+                duplicateTicket,
+                secondTicket,
+            ])
+
+            const { result } = renderHook(() => useTickets())
+
+            expect(
+                result.current.tickets.map(({ id, title }) => ({
+                    id,
+                    title,
+                }))
+            ).toEqual([
+                { id: 101, title: "First ticket" },
+                { id: 102, title: "Second ticket" },
+            ])
+
+            expect(
+                JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]")
+            ).toEqual(result.current.tickets)
+        })
+
+        it("does not reserve an ID for an invalid stored ticket", () => {
+            saveStoredTickets([
+                makeTicket({
+                    id: 101,
+                    status: "invalid-status",
+                }),
+                makeTicket({
+                    id: 101,
+                    title: "Valid ticket",
+                }),
+            ])
+
+            const { result } = renderHook(() => useTickets())
+
+            expect(result.current.tickets).toHaveLength(1)
+            expect(result.current.tickets[0].id).toBe(101)
+            expect(result.current.tickets[0].title).toBe("Valid ticket")
+        })
+
         it("normalizes valid dates and replaces invalid dates with null", () => {
             saveStoredTickets([
                 makeTicket({

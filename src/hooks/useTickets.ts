@@ -3,7 +3,6 @@ import { tickets as initialTickets } from "../data/tickets"
 import type { Ticket, TicketStatus, TicketCategory, CreateTicketInput, TicketComment } from "../types/Ticket"
 
 const STORAGE_KEY = "supportdesk:tickets"
-
 const NEXT_ID_STORAGE_KEY = "supportdesk:nextTicketId"
 
 function getNextTicketId(tickets: Ticket[]): number {
@@ -108,58 +107,69 @@ function isStoredTicket(value: unknown): value is StoredTicket {
 
 export function useTickets() {
     const [tickets, setTickets] = useState<Ticket[]>(() => {
-    try {
-        const storedTickets = localStorage.getItem(STORAGE_KEY)
+        try {
+            const storedTickets = localStorage.getItem(STORAGE_KEY)
 
-        if (storedTickets === null) {
+            if (storedTickets === null) {
+                return initialTickets
+            }
+
+            const parsedTickets: unknown = JSON.parse(storedTickets)
+
+            if (Array.isArray(parsedTickets)) {
+                const validTickets = parsedTickets.filter(isStoredTicket)
+
+                const seenIds = new Set<number>()
+
+                const uniqueTickets = validTickets.filter((ticket) => {
+                    if (seenIds.has(ticket.id)) {
+                        return false
+                    }
+
+                    seenIds.add(ticket.id)
+                    return true
+                })
+
+                return uniqueTickets.map((ticket) => {
+                    const demoTicket = initialTickets.find(
+                        (initialTicket) => initialTicket.id === ticket.id
+                    )
+
+                    return {
+                        ...ticket,
+                        category: isTicketCategory(ticket.category)
+                            ? ticket.category
+                            : "general",
+                        createdAt:
+                            normalizeStoredDate(ticket.createdAt) ??
+                            demoTicket?.createdAt ??
+                            null,
+                        updatedAt: normalizeStoredDate(ticket.updatedAt),
+                        comments: Array.isArray(ticket.comments)
+                            ? ticket.comments.filter(isStoredComment)
+                            : [],
+                    }
+                })
+            }
+
+            return initialTickets
+        } catch {
             return initialTickets
         }
-
-        const parsedTickets: unknown = JSON.parse(storedTickets)
-
-       if (Array.isArray(parsedTickets)) {
-        const validTickets = parsedTickets.filter(isStoredTicket)
-
-        return validTickets.map((ticket) => {
-            const demoTicket = initialTickets.find(
-            (initialTicket) => initialTicket.id === ticket.id
-            )
-
-            return {
-                ...ticket,
-                category: isTicketCategory(ticket.category)
-                    ? ticket.category
-                    : "general",
-                createdAt:
-                    normalizeStoredDate(ticket.createdAt) ??
-                    demoTicket?.createdAt ??
-                    null,
-                updatedAt: normalizeStoredDate(ticket.updatedAt),
-                comments: Array.isArray(ticket.comments)
-                    ? ticket.comments.filter(isStoredComment)
-                    : [],
-            }
-        })
-    }
-
-        return initialTickets
-    } catch {
-        return initialTickets
-    }
     })
 
     const nextTicketId = useRef(getNextTicketId(tickets))
 
     useEffect(() => {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
-        localStorage.setItem(
-            NEXT_ID_STORAGE_KEY,
-            String(nextTicketId.current)
-        )
-    } catch (error) {
-        console.error("Failed to save tickets:", error)
-    }
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets))
+            localStorage.setItem(
+                NEXT_ID_STORAGE_KEY,
+                String(nextTicketId.current)
+            )
+        } catch (error) {
+            console.error("Failed to save tickets:", error)
+        }
     }, [tickets])
 
     function createTicket(input: CreateTicketInput) {
@@ -219,7 +229,7 @@ export function useTickets() {
                         status: newStatus,
                         updatedAt: now,
                     }
-                : ticket
+                    : ticket
             )
         )
     }
@@ -241,7 +251,7 @@ export function useTickets() {
                         createdAt: ticket.createdAt ?? null,
                         updatedAt: now,
                     }
-                : ticket
+                    : ticket
             )
         )
     }

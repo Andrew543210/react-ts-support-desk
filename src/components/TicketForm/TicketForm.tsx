@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styles from "./TicketForm.module.css"
 import type { FormEvent } from "react"
 import type { Ticket, TicketPriority, TicketCategory, CreateTicketInput } from "../../types/Ticket"
@@ -20,28 +20,23 @@ type TicketFormProps =
       }
 
 export default function TicketForm(props: TicketFormProps) {
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [priority, setPriority] = useState<TicketPriority>("medium")
-    const [category, setCategory] = useState<TicketCategory>("general")
+    const [title, setTitle] = useState(
+        props.mode === "edit" ? props.editingTicket.title : ""
+    )
+
+    const [description, setDescription] = useState(
+        props.mode === "edit" ? props.editingTicket.description : ""
+    )
+
+    const [priority, setPriority] = useState<TicketPriority>(
+        props.mode === "edit" ? props.editingTicket.priority : "medium"
+    )
+
+    const [category, setCategory] = useState<TicketCategory>(
+        props.mode === "edit" ? props.editingTicket.category : "general"
+    )
+
     const [error, setError] = useState("")
-
-    const isEditing = props.mode === "edit"
-    const editingTicket = isEditing ? props.editingTicket : null
-
-    useEffect(() => {
-        if (editingTicket) {
-            setTitle(editingTicket.title)
-            setDescription(editingTicket.description)
-            setPriority(editingTicket.priority)
-            setCategory(editingTicket.category ?? "general")
-        } else {
-            setTitle("")
-            setDescription("")
-            setPriority("medium")
-            setCategory("general")
-        }
-    }, [editingTicket])
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

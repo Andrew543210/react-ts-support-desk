@@ -41,6 +41,7 @@ export default function EditTicketPage({
             <h1>Edit Ticket</h1>
 
             <TicketForm
+                key={ticket.id}
                 mode="edit"
                 editingTicket={ticket}
                 onSaveTicket={handleSaveTicket}
